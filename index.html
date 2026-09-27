@@ -1883,6 +1883,27 @@
             background-color: #ff5252;
         }
 
+        /* 【本次修改：好友管理删除按钮改为低饱和豆沙色，避免原亮红色过于突兀；仅影响此按钮】 */
+        .delete-friend-setting-btn {
+            width: 100%;
+            background-color: #C9828C;
+            color: #ffffff;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background-color 0.2s, opacity 0.2s;
+        }
+
+        .delete-friend-setting-btn:hover {
+            background-color: #B9747E;
+        }
+
+        .delete-friend-setting-btn:active {
+            opacity: 0.86;
+        }
+
         .export-history-btn {
             background-color: var(--korea-primary);
             color: white;
@@ -3860,13 +3881,6 @@
                     </div>
                 </div>
 
-                <!-- 【本次修改：删除当前好友；删除后同时移除该好友全部聊天与设置数据】 -->
-                <div class="setting-section">
-                    <h3>好友管理</h3>
-                    <button class="clear-history-btn" id="deleteCurrentFriendBtn" style="width:100%;">删除当前好友</button>
-                    <div class="toggle-description">删除后，该好友及其聊天记录、设置和相关数据都会从好友列表中移除</div>
-                </div>
-
                 <!-- 字卡设置 -->
                 <div class="setting-section">
                     <h3>字卡设置</h3>
@@ -3913,6 +3927,13 @@
                     <div class="sticker-grid" id="userStickerList">
                         <!-- 用户表情包列表会在这里动态生成 -->
                     </div>
+                </div>
+
+                <!-- 【本次修改：好友管理移动到设置页面最底部；功能逻辑保持不变】 -->
+                <div class="setting-section">
+                    <h3>好友管理</h3>
+                    <button class="delete-friend-setting-btn" id="deleteCurrentFriendBtn">删除当前好友</button>
+                    <div class="toggle-description">删除后，该好友及其聊天记录、设置和相关数据都会从好友列表中移除</div>
                 </div>
             </div>
         </div>
@@ -5625,16 +5646,25 @@
             const currentFriend = getCurrentFriend();
             const index = currentFriend.messages.length - 1;
 
+            /* 【本次修改：在插入新消息前记录当前是否处于“最新消息”状态】
+               - 未浏览历史：角色/用户新消息都继续跟随到最新；
+               - 正在浏览历史：角色消息不抢位置；用户发送入口会先把 isViewingHistory 设为 false，因此用户消息仍优先滚到最新。 */
+            const shouldFollowLatest = !isViewingHistory;
+
             // ✅ 直接复用已有的单条渲染逻辑
             const node = renderSingleMessage(msg, index, currentFriend);
 
             chatArea.appendChild(node);
 
-            /* 【本次修改：角色消息永远不触发自动滚动】
-               用户主动发送的文字 / 图片 / 表情包 / 语音，分别在发送入口里强制滚到最新；
-               角色消息这里只负责更新“回到最新”按钮，避免角色新消息抢走当前浏览位置。 */
+            /* 【本次修改：依据“消息插入前”的浏览状态决定是否跟随，避免追加消息后滚动事件误把状态判成浏览历史】 */
             requestAnimationFrame(() => {
-                updateJumpLatestButton();
+                requestAnimationFrame(() => {
+                    if (shouldFollowLatest) {
+                        isViewingHistory = false;
+                        chatArea.scrollTop = chatArea.scrollHeight;
+                    }
+                    updateJumpLatestButton();
+                });
             });
         }
 
