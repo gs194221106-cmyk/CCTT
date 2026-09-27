@@ -3832,7 +3832,7 @@
                         </label>
                     </div>
                     <div class="toggle-description">
-                        开启后，对方回复时可能会引用您之前发送的消息进行回复
+                        角色可能会引用自己或您之前发送的消息，双方被选择的权重一致
                     </div>
                 </div>
 
@@ -3858,6 +3858,13 @@
                         <button class="capsule-btn" id="clearHistoryBtn">清除聊天记录</button>
                         <button class="capsule-btn" id="exportHistoryBtn">导出聊天记录</button>
                     </div>
+                </div>
+
+                <!-- 【本次修改：删除当前好友；删除后同时移除该好友全部聊天与设置数据】 -->
+                <div class="setting-section">
+                    <h3>好友管理</h3>
+                    <button class="clear-history-btn" id="deleteCurrentFriendBtn" style="width:100%;">删除当前好友</button>
+                    <div class="toggle-description">删除后，该好友及其聊天记录、设置和相关数据都会从好友列表中移除</div>
                 </div>
 
                 <!-- 字卡设置 -->
@@ -4148,6 +4155,7 @@
         const quoteReplyToggle = document.getElementById('quoteReplyToggle');
         const clearHistoryBtn = document.getElementById('clearHistoryBtn');
         const exportHistoryBtn = document.getElementById('exportHistoryBtn');
+        const deleteCurrentFriendBtn = document.getElementById('deleteCurrentFriendBtn'); // 【本次修改：删除当前好友按钮】
         const confirmDialog = document.getElementById('confirmDialog');
         const confirmYes = document.getElementById('confirmYes');
         const confirmNo = document.getElementById('confirmNo');
@@ -4672,11 +4680,15 @@
                     clearTimeout(activeSendingTimers[friendId]);
                 }
 
-                // 删除临时状态
+                // 【本次修改：删除好友时同时清理该好友全部临时任务/来电任务，避免删除后仍触发】
+                if (incomingCallTimers[friendId]) clearTimeout(incomingCallTimers[friendId]);
                 delete replyTaskQueues[friendId];
                 delete activeSendingTimers[friendId];
                 delete isProcessingQueues[friendId];
+                delete replyQueueGeneration[friendId];
+                delete incomingCallTimers[friendId];
 
+                // 【本次修改：删除好友主数据后，其聊天记录、头像、设置等持久化内容一并不存在】
                 delete appData.friends[friendId];
 
                 // 如果删除的是当前好友，切换到另一个好友
@@ -4746,11 +4758,13 @@
                 minute: '2-digit'
             });
 
-            // 【本次修改：通话结束 / 撤回记录本身就是“时间戳位置”的胶囊，不再额外生成普通时间戳】
+            // 【本次修改：通话记录 / 撤回记录继续复用时间戳胶囊；结束/取消默认带时间，拒接可只显示文字】
             if (msg.type === 'call_event' || msg.type === 'recall_event') {
                 const row = document.createElement('div');
                 row.className = 'call-event-row';
-                row.innerHTML = `<span>${msg.content || (msg.type === 'recall_event' ? '你撤回了一条消息' : '通话结束')}</span>`;
+                const eventText = msg.content || (msg.type === 'recall_event' ? '你撤回了一条消息' : '通话结束');
+                const callEventText = msg.includeTime === false ? eventText : `${currentTime} ${eventText}`;
+                row.innerHTML = `<span>${msg.type === 'call_event' ? callEventText : eventText}</span>`;
                 fragment.appendChild(row);
                 return fragment;
             }
@@ -4882,7 +4896,14 @@
                 const quoteText = document.createElement('div');
                 quoteText.className = 'quoted-text';
 
-                if (msg.quoteType === 'image' || msg.quoteType === 'sticker') {
+                // 【本次修改：若引用目标后来已撤回，保留引用气泡格式，只显示“已撤回的消息”】
+                const quotedTargetWasRecalled = !!msg.quoteTargetTimestamp && currentFriend.messages.some(m =>
+                    m.timestamp === msg.quoteTargetTimestamp && m.type === 'recall_event'
+                );
+
+                if (quotedTargetWasRecalled) {
+                    quoteText.textContent = '已撤回的消息';
+                } else if (msg.quoteType === 'image' || msg.quoteType === 'sticker') {
                     const img = document.createElement('img');
                     img.src = msg.quote;
                     img.className = 'quoted-image';
@@ -4890,10 +4911,11 @@
                 } else if (msg.quoteType === 'voice') {
                     quoteText.textContent = '（语音消息）'; // 【本次修改：引用语音消息时显示占位文字】
                 } else {
+                    const quoteString = String(msg.quote ?? '');
                     quoteText.textContent =
-                        msg.quote.length > 50
-                            ? msg.quote.substring(0, 50) + '...'
-                            : msg.quote;
+                        quoteString.length > 50
+                            ? quoteString.substring(0, 50) + '...'
+                            : quoteString;
                 }
 
                 const mainContent = document.createElement('div');
@@ -5293,12 +5315,14 @@
                     friend.messages.push(msg);
 
                     await saveData();
-                    addMessageToChat(msg);
-                    /* 【本次修改：我主动发送语音后也强制滚到最新一条】 */
+                    /* 【本次修改：用户发送语音时先退出历史浏览，再插入消息，确保与文字/图片一致自动滚到最新】 */
                     isViewingHistory = false;
+                    addMessageToChat(msg);
                     requestAnimationFrame(() => {
-                        chatArea.scrollTop = chatArea.scrollHeight;
-                        updateJumpLatestButton();
+                        requestAnimationFrame(() => {
+                            chatArea.scrollTop = chatArea.scrollHeight;
+                            updateJumpLatestButton();
+                        });
                     });
 
                     createReplyTask(friend.id, msg);
@@ -5337,12 +5361,14 @@
             }
 
             currentFriend.messages.push(userMessage);
-            addMessageToChat(userMessage);
-            /* 【本次修改：只有“我主动发送消息”时，强制回到最新一条；角色新消息仍保留历史浏览位置】 */
+            /* 【本次修改：用户发送文字 / 图片 / 表情包时，先退出历史浏览，再插入消息，统一自动滚到最新】 */
             isViewingHistory = false;
+            addMessageToChat(userMessage);
             requestAnimationFrame(() => {
-                chatArea.scrollTop = chatArea.scrollHeight;
-                updateJumpLatestButton();
+                requestAnimationFrame(() => {
+                    chatArea.scrollTop = chatArea.scrollHeight;
+                    updateJumpLatestButton();
+                });
             });
 
             // 保存数据（包括用户消息）
@@ -5415,19 +5441,29 @@
                 const randomType = availableTypes[Math.floor(Math.random() * availableTypes.length)];
                 let replyContent = '';
 
-                // 决定是否引用用户消息（每条消息独立20%概率）
+                // 【本次修改：引用概率仍保持每条独立20%；触发后用户/角色双方权重严格一致】
                 let shouldQuote = false;
                 let quoteMessage = null;
                 if (friend.settings.enableQuoteReply && Math.random() < 0.2) {
                     shouldQuote = true;
 
-                    // 从用户的历史消息中随机选择一条（最近10条）
-                    const userMessages = friend.messages.filter(m => m.sender === 'user');
-                    const recentUserMessages = userMessages.slice(-10); // 取最近10条
+                    // 【本次修改：双方各取最近10条可引用消息；先50/50选“用户或角色”，再在该侧随机一条】
+                    const recentUserMessages = friend.messages.filter(m =>
+                        m.sender === 'user' && m.type !== 'call_event' && m.type !== 'recall_event'
+                    ).slice(-10);
+                    const recentBotMessages = friend.messages.filter(m =>
+                        m.sender === 'bot' && m.type !== 'call_event' && m.type !== 'recall_event'
+                    ).slice(-10);
 
-                    if (recentUserMessages.length > 0) {
-                        // 完全随机选择一条，不优先当前消息
-                        quoteMessage = recentUserMessages[Math.floor(Math.random() * recentUserMessages.length)];
+                    let quotePool = [];
+                    if (recentUserMessages.length > 0 && recentBotMessages.length > 0) {
+                        quotePool = Math.random() < 0.5 ? recentUserMessages : recentBotMessages;
+                    } else {
+                        quotePool = recentUserMessages.length > 0 ? recentUserMessages : recentBotMessages;
+                    }
+
+                    if (quotePool.length > 0) {
+                        quoteMessage = quotePool[Math.floor(Math.random() * quotePool.length)];
                     }
                 }
 
@@ -5450,7 +5486,8 @@
                 if (quoteMessage && shouldQuote) {
                     botMessage.quote = quoteMessage.content;
                     botMessage.quoteType = quoteMessage.type;
-                    botMessage.quoteSender = appData.userName;
+                    // 【本次修改：引用用户显示用户名称；引用角色自己的消息显示角色名称】
+                    botMessage.quoteSender = quoteMessage.sender === 'user' ? appData.userName : friend.name;
                     botMessage.quoteTargetTimestamp = quoteMessage.timestamp;
                 }
 
@@ -5593,9 +5630,10 @@
 
             chatArea.appendChild(node);
 
-            // 【本次修改：只有原本就在底部时才自动跟随；查看历史时绝不抢位置】
+            /* 【本次修改：角色消息永远不触发自动滚动】
+               用户主动发送的文字 / 图片 / 表情包 / 语音，分别在发送入口里强制滚到最新；
+               角色消息这里只负责更新“回到最新”按钮，避免角色新消息抢走当前浏览位置。 */
             requestAnimationFrame(() => {
-                if (!isViewingHistory) chatArea.scrollTop = chatArea.scrollHeight;
                 updateJumpLatestButton();
             });
         }
@@ -6330,6 +6368,11 @@
             renderChat();
         });
 
+        // 【本次修改：设置页删除当前好友】
+        deleteCurrentFriendBtn.addEventListener('click', () => {
+            deleteFriend(appData.currentFriendId);
+        });
+
         clearHistoryBtn.addEventListener('click', () => {
             document.getElementById('confirmTitle').textContent = "确定要清除所有聊天记录吗？";
             confirmDialog.style.display = 'flex';
@@ -6824,7 +6867,7 @@
             if (!simCallActive) return;
 
             const endedFriendId = simCallFriendId;
-            const callWasConnected = simCallConnected; // 【本次修改：仅已接通通话留下结束记录】
+            const callWasConnected = simCallConnected; // 【本次修改：用于区分“通话结束”与“取消通话”】
             simCallActive = false;
             simCallConnected = false;
             simCallFriendId = null;
@@ -6861,7 +6904,28 @@
                 scheduleActiveMessage(endedFriendId);
             }
 
-            if (friend && callWasConnected) { const record = { sender: 'bot', type: 'call_event', content: '通话结束', timestamp: Date.now() }; friend.messages.push(record); saveData(); if (appData.currentFriendId === endedFriendId) addMessageToChat(record); }
+            // 【本次修改：已接通后挂断显示“通话结束”；未接通时主动取消显示“取消通话”，两者都复用时间戳胶囊】
+            if (friend) {
+                const record = {
+                    sender: 'bot',
+                    type: 'call_event',
+                    content: callWasConnected ? '通话结束' : '取消通话',
+                    timestamp: Date.now()
+                };
+                friend.messages.push(record);
+                saveData();
+                if (appData.currentFriendId === endedFriendId) {
+                    // 【本次修改：用户主动挂断/取消通话属于用户行为，必须立即滚到最新】
+                    isViewingHistory = false;
+                    addMessageToChat(record);
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            chatArea.scrollTop = chatArea.scrollHeight;
+                            updateJumpLatestButton();
+                        });
+                    });
+                }
+            }
             if (friend && friend.settings.incomingCallEnabled) scheduleIncomingCall(endedFriendId);
             updateChatStatusForCurrentFriend();
         }
@@ -6869,7 +6933,34 @@
         // 【本次修改：各角色独立随机主动来电，2-10分钟重新随机】
         function scheduleIncomingCall(friendId) { clearTimeout(incomingCallTimers[friendId]); const f = appData.friends[friendId]; if (!f || !f.settings.incomingCallEnabled) return; incomingCallTimers[friendId] = setTimeout(() => { const x = appData.friends[friendId]; if (!x || !x.settings.incomingCallEnabled) return; if (incomingCallFriendId || (simCallActive && simCallFriendId === friendId) || document.hidden) { scheduleIncomingCall(friendId); return; } incomingCallFriendId = friendId; incomingCallName.textContent = x.name || '聊天伙伴'; incomingCallAvatar.innerHTML = ''; if (x.avatarImage) { const im = document.createElement('img'); im.src = x.avatarImage; im.style.cssText = 'width:100%;height:100%;object-fit:cover'; incomingCallAvatar.appendChild(im) } else incomingCallAvatar.textContent = x.avatar || x.name.charAt(0); incomingCallBackground.style.backgroundImage = x.useCustomBackground && x.backgroundImage ? `url("${x.backgroundImage}")` : 'none'; incomingCallStartedAt = Date.now(); incomingCallDuration.textContent = '00:00'; clearInterval(incomingCallClockTimer); incomingCallClockTimer = setInterval(() => incomingCallDuration.textContent = simCallFormatDuration(Date.now() - incomingCallStartedAt), 1000); incomingCallOverlay.classList.add('active'); incomingCallOverlay.setAttribute('aria-hidden', 'false'); if (navigator.vibrate) navigator.vibrate([250, 150, 250]); }, (2 + Math.random() * 8) * 60 * 1000); }
         function dismissIncomingCall(reschedule = true) { const id = incomingCallFriendId; incomingCallFriendId = null; clearInterval(incomingCallClockTimer); incomingCallOverlay.classList.remove('active'); incomingCallOverlay.setAttribute('aria-hidden', 'true'); if (reschedule && id && appData.friends[id]?.settings.incomingCallEnabled) scheduleIncomingCall(id); }
-        incomingCallDecline.addEventListener('click', () => dismissIncomingCall(true));
+        // 【本次修改：用户拒接后写入“你已拒绝本次通话”胶囊；该用户行为在当前聊天中强制滚到最新】
+        incomingCallDecline.addEventListener('click', () => {
+            const declinedFriendId = incomingCallFriendId;
+            const friend = declinedFriendId ? appData.friends[declinedFriendId] : null;
+            dismissIncomingCall(true);
+            if (!friend) return;
+
+            const record = {
+                sender: 'system',
+                type: 'call_event',
+                content: '你已拒绝本次通话',
+                includeTime: false,
+                timestamp: Date.now()
+            };
+            friend.messages.push(record);
+            saveData();
+
+            if (appData.currentFriendId === declinedFriendId) {
+                isViewingHistory = false;
+                addMessageToChat(record);
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        chatArea.scrollTop = chatArea.scrollHeight;
+                        updateJumpLatestButton();
+                    });
+                });
+            }
+        });
         incomingCallAccept.addEventListener('click', () => { const id = incomingCallFriendId, f = id && appData.friends[id]; if (!f) return dismissIncomingCall(false); if (simCallActive && simCallFriendId !== id) endSimulatedCall(); if (simCallActive) return; dismissIncomingCall(false); simCallActive = true; simCallConnected = false; simCallFriendId = id; replyQueueGeneration[id] = (replyQueueGeneration[id] || 0) + 1; replyTaskQueues[id] = []; isProcessingQueues[id] = false; stopActiveSending(id); simCallRenderFriend(f); simCallOverlay.classList.remove('dialing', 'speaking'); simCallOverlay.classList.add('active'); simCallOverlay.setAttribute('aria-hidden', 'false'); simCallConnect(); });
         function restartAllIncomingCalls() { Object.keys(appData.friends).forEach(id => { if (appData.friends[id].settings.incomingCallEnabled) scheduleIncomingCall(id) }) }
 
