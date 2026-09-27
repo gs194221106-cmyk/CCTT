@@ -103,46 +103,150 @@
    ========================= */
         .header {
             position: relative;
-
-
-            left: 0px;
-            right: 0px;
-
-            height: 65px;
+            width: 100%;
+            height: 71px;
             background: #ffffff;
-            border-radius: 0px;
 
             display: flex;
             align-items: center;
             justify-content: space-between;
 
-            padding-left: 40px;
-
             box-shadow: inset 0 -0.5px 1px rgba(0, 0, 0, 0.05);
         }
 
+        .header-center {
+            position: absolute;
+            left: 50%;
+            top: 42%;
+            transform: translate(-50%, -50%);
+
+            /* 不再用 flex 布局左右 */
+            pointer-events: auto;
+        }
+
         .header-left {
+            padding-left: 54px;
             display: flex;
             align-items: center;
-            flex: 1;
         }
+
+        .header-left-btn {
+            width: 14px;
+            height: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: transparent;
+            border: none;
+            padding: 0;
+
+            color: #424242;
+            /* 控制爱心颜色 */
+            cursor: pointer;
+            transform: translateY(-3px);
+
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.16));
+        }
+
+
+        .header-left-btn:active {
+            transform: scale(0.94);
+            opacity: 0.7;
+        }
+
+        .header-left-icon {
+            width: 22px;
+            height: 22px;
+            display: block;
+        }
+
+        .chat-info-left {
+            position: absolute;
+            right: calc(100% - 11px);
+            top: 12%;
+            transform: translateY(-50%);
+            z-index: 3;
+        }
+
+        .voice-indicator {
+            position: absolute;
+            width: 12.5px;
+            height: 12.5px;
+            left: -44px;
+            /* 距离头像 */
+            top: 84.5%;
+            transform: translateY(-50%);
+
+            color: rgba(0, 0, 0, 0.45);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            pointer-events: none;
+            /* 不抢点击 */
+        }
+
+        /* .voice-icon path {
+            stroke: currentColor;
+            stroke-width: 3.25;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+
+            transform-box: fill-box;
+            
+            transform-origin: top center;
+           
+
+            animation: voiceWave 1.2s ease-in-out infinite;
+        }
+
+        .voice-icon path:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .voice-icon path:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .voice-icon path:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes voiceWave {
+            0% {
+                opacity: 0.4;
+                transform: scaleY(0.6);
+            }
+
+            50% {
+                opacity: 0.9;
+                transform: scaleY(1);
+            }
+
+            100% {
+                opacity: 0.4;
+                transform: scaleY(0.6);
+            }
+        }*/
 
         /* =========================
    头像 + 状态整体容器
    ========================= */
         .avatar-container {
+            position: relative;
             display: flex;
-            align-items: center;
-            cursor: pointer;
+            justify-content: center;
         }
 
         /* 用于承载头像 + 在线点（不参与布局） */
         .avatar-wrapper {
             position: relative;
-            width: 37px;
-            height: 37px;
-            margin-right: 10px;
-            /* ✅ 头像与文字的真实间距 */
+            width: 50px;
+            height: 50px;
+            z-index: 2;
         }
 
         /* =========================
@@ -201,95 +305,103 @@
             box-shadow: 0 0 0.5px rgba(0, 0, 0, 0.25);
         }
 
+        .chat-info-right {
+            position: absolute;
+            left: calc(100% + 11.5px);
+            top: 68%;
+            transform: translateY(-50%);
+        }
 
-        /* =========================
-   角色信息文字
-   ========================= */
         .chat-info {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            transform: translateY(0.73px);
+            align-items: center;
+
+            /* 微调基线即可，不再做纵向布局 */
+            transform: translateY(0.5px);
         }
 
         .chat-title {
-            font-size: 12.5px;
+            display: inline-flex;
+            align-items: center;
+
+            padding: 4px 10px;
+
+            font-size: 7.5px;
             font-weight: 500;
+            line-height: 1;
+
             color: var(--header-text-color);
-            line-height: 1.1;
-            margin-bottom: 1.1px;
-            text-shadow: var(--header-text-shadow);
+
+            background: #ffffff;
+
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            /* 极细描边 */
+
+            border-radius: 9999px;
+
+            /* Figma 同款轻阴影 */
+            box-shadow:
+                5px 5px 25px 2px rgba(0, 0, 0, 0.05);
+
+            white-space: nowrap;
         }
 
         .chat-status {
+            display: inline-flex;
+            align-items: center;
+
+            padding: 2.5px 9px;
+
             font-size: 7px;
-            line-height: 1.3;
-            color: var(--header-status-color);
-            text-shadow: var(--header-text-shadow);
+            font-weight: 400;
+            line-height: 1;
+
+            color: #292929;
+            background: #ffffff;
+
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 3px;
+
+            box-shadow: 5px 5px 25px 2px rgba(0, 0, 0, 0.02);
+
+            white-space: nowrap;
         }
 
         /* =========================
    右侧按钮
    ========================= */
         .header-right {
+            padding-right: 46px;
             display: flex;
             align-items: center;
-            margin-right: 40px;
         }
 
         .settings-btn {
-            position: relative;
-            overflow: visible;
-
-            width: 30px;
-            height: 24px;
-
-            background: #000;
-            border: none;
-            border-radius: 6px;
+            width: 18px;
+            height: 18px;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
+            background: transparent;
+            border: none;
+            padding: 0;
+
+            color: #1E1E1E;
+            /* 默认颜色 */
             cursor: pointer;
-            z-index: 1;
+            transform: translateY(-4px);
         }
 
-        /* 爱心 */
-        .settings-btn::before {
-            content: "♥";
-            color: #fff;
-            font-size: 11px;
-            line-height: 1;
-
-            position: relative;
-            z-index: 2;
+        .settings-btn:active {
+            transform: scale(0.94);
+            opacity: 0.7;
         }
 
-        /* ↓↓↓ 真正“自然长出来”的尾巴 ↓↓↓ */
-        .settings-btn::after {
-            content: "";
-            position: absolute;
-
-            left: 50%;
-            bottom: -1px;
-            /* 吃进按钮一点 */
-
-            width: 12px;
-            height: 12px;
-
-            background: #000;
-
-            transform:
-                translateX(-50%) rotate(45deg);
-
-            border-radius: 3px;
-            /* ✅ 所有角都是真的圆 */
-
-            z-index: -1;
-            /* ✅ 必须在按钮下面 */
-            pointer-events: none;
+        .settings-icon {
+            width: 22px;
+            height: 22px;
         }
 
         .chat-wrapper {
@@ -320,7 +432,7 @@
             -webkit-overflow-scrolling: touch;
 
             padding: 12px;
-            padding-bottom: 12px;
+            padding-bottom: 0px;
             /* ✅ 比 100px 小一档 */
 
             background: transparent;
@@ -435,6 +547,122 @@
             margin-right: var(--message-avatar-gap);
         }
 
+        /* =========================
+   语音内容行（不控制高度）
+========================= */
+        .voice-content {
+            display: inline-flex;
+            align-items: center;
+
+            padding: 0 12px;
+            box-sizing: border-box;
+
+            /* ✅ 关键：内容靠右 */
+            justify-content: flex-end;
+
+            white-space: nowrap;
+        }
+
+        /* =========================
+   秒数（左）
+========================= */
+        .voice-duration {
+            font-size: 10px;
+            line-height: 1;
+            /* 只影响自身 */
+            margin-right: 6px;
+            white-space: nowrap;
+            color: #333;
+        }
+
+        /* =========================
+   声波图标容器
+========================= */
+        .voice-wave-icon {
+            display: inline-flex;
+            align-items: center;
+            line-height: 0;
+        }
+
+        /* =========================
+   SVG 声波本体
+========================= */
+        .voice-svg {
+            display: block;
+            /* ⭐ 不参与行高计算 */
+            width: 24px;
+            height: 18px;
+        }
+
+        /* =========================
+   声波样式
+========================= */
+        .voice-svg .wave {
+            fill: none;
+            stroke: #333;
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+
+        .voice-svg .w1 {
+            opacity: 0.6;
+        }
+
+        .voice-svg .w2 {
+            opacity: 0.8;
+        }
+
+        .voice-svg .w3 {
+            opacity: 1;
+        }
+
+        /* =========================
+   朝左 (((
+========================= */
+        .flip-left {
+            transform: scaleX(-1);
+            transform-origin: center;
+        }
+
+
+        /* ===== 播放动画（微信风）===== */
+        .voice-content.playing .wave {
+            opacity: 0.3;
+            animation: waveBlink 1s infinite ease-in-out;
+        }
+
+        .voice-content.playing .w1 {
+            animation-delay: 0s;
+        }
+
+        .voice-content.playing .w2 {
+            animation-delay: 0.15s;
+        }
+
+        .voice-content.playing .w3 {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes waveBlink {
+            0% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.3;
+            }
+        }
+
+        /* 失效语音 */
+        .voice-content.voice-invalid {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
         .user-message {
             background-color: var(--bubble-user);
             color: var(--wechat-text);
@@ -483,7 +711,7 @@
         .input-area {
             position: relative;
             width: 100%;
-            height: 122px;
+            height: 108px;
             /* 👈 这里，88 → 96 */
             background: #ffffff;
             box-shadow: inset 0 0.5px 1px rgba(0, 0, 0, 0.05);
@@ -505,7 +733,7 @@
             left: 0;
             right: 0;
 
-            bottom: 51.7px;
+            bottom: 34px;
             /* 209 ÷ 3 */
 
             display: flex;
@@ -546,6 +774,8 @@
             stroke-linejoin: round;
         }
 
+
+
         /* ===== TOOL 标签（悬浮在输入框上方，不随多行变化） ===== */
         .tool-label {
             position: absolute;
@@ -582,7 +812,7 @@
         .tool-panel {
             position: fixed;
             /* 🔥 改这里：出生点 */
-            top: 23%;
+            top: 17%;
             left: 67%;
             transform: translate(-50%, -50%);
             /* ↑ 从“中心点”出生，而不是底部 */
@@ -750,41 +980,45 @@
             padding: 0;
         }
 
-        /* ===== Home Indicator 上方的文本标签 ===== */
-        .input-footer-label {
-            position: fixed;
-
-            bottom: 19.2px;
-            /* ≈ 89 / 3，保留你的视觉定位 */
-            left: 0;
-            right: 0;
-
-            height: 24px;
-            /* 字体高度参考，保留 */
-            line-height: 24px;
-
-            text-align: center;
-
-            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-            font-weight: 600;
-            /* SemiBold（第一推荐） */
-            font-style: normal;
-
-            font-size: 11px;
-            letter-spacing: 0.2px;
-            /* 比 TOOL 稍微收一点，更像 Eina 01 */
-            color: #bdbdbd;
-
-            background: transparent;
-            pointer-events: none;
-
-            z-index: 5;
-        }
 
         /* 修改：输入栏placeholder字体大小 */
         .message-input::placeholder {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--wechat-time);
+        }
+
+        /*图片大小 放大预览*/
+        .chat-image-thumb {
+            width: 120px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .image-preview {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .image-preview img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+        }
+
+        /*表情包消息记录预览*/
+        .chat-sticker {
+            width: 72px;
+            height: 72px;
+            object-fit: contain;
+            border-radius: 10px;
+            cursor: pointer;
         }
 
         /* 设置面板 - 修改：全屏白色背景 */
@@ -1526,7 +1760,7 @@
             backdrop-filter: blur(12px);
 
             border-radius: 20px;
-            padding: 12px;
+            padding: 12px 12px 12px 29px;
 
             height: 160px;
             /* 比你原来 150 略大一点 */
@@ -2048,15 +2282,6 @@
             padding: 8px;
         }
 
-        /* 新增：引用消息中的图片样式 */
-        .quoted-image {
-            max-width: 60px;
-            max-height: 60px;
-            border-radius: 4px;
-            margin-top: 4px;
-            object-fit: cover;
-        }
-
         /* 新增：批量字卡输入弹窗样式 */
         .batch-phrase-popup {
             position: fixed;
@@ -2327,13 +2552,403 @@
         /* ===== 引用中的图片 / 表情包：强制缩略图限高（最终版） ===== */
         .quoted-content .quoted-text img.quoted-image {
             max-height: 64px !important;
-            max-width: 96px !important;
+            max-width: 64px !important;
+            /* 🔥 只改这里 */
             width: auto !important;
             height: auto !important;
             object-fit: cover;
             border-radius: 6px;
             display: block;
         }
+
+
+
+        /* ==========================
+           【本次修改：模拟语音通话 V2 页面 CSS 开始】
+           仅修改上一版新增的通话模块，不改原聊天页面样式
+           ========================== */
+        .sim-call-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 12000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: max(18px, env(safe-area-inset-top)) 14px max(18px, env(safe-area-inset-bottom));
+            background: rgba(34, 34, 36, .20);
+            backdrop-filter: blur(7px);
+            -webkit-backdrop-filter: blur(7px);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity .24s ease, visibility .24s ease;
+            overflow: hidden;
+        }
+
+        .sim-call-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .sim-call-background {
+            position: absolute;
+            inset: 0;
+            background-position: center;
+            background-size: cover;
+            filter: blur(22px);
+            opacity: .18;
+            transform: scale(1.10);
+        }
+
+        .sim-call-background::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(247, 247, 248, .78);
+        }
+
+        .sim-call-panel {
+            position: relative;
+            z-index: 1;
+            /* 【本次修改：缩小通话卡片宽度，增加与页面左右两侧的留白】 */
+            width: min(84vw, 350px);
+            height: min(82vh, 680px);
+            min-height: 500px;
+            padding: 30px 24px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+            border-radius: 30px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, .86);
+            border: 1px solid rgba(255, 255, 255, .74);
+            box-shadow: 0 22px 65px rgba(0, 0, 0, .14);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+
+        .sim-call-state {
+            font-size: 10px;
+            color: rgba(35, 35, 38, .45);
+            letter-spacing: .8px;
+            margin-bottom: 14px;
+        }
+
+        /* 【本次修改：拨号阶段 Calling 保持在顶部，中部只显示连接/心跳动效】 */
+        .sim-call-overlay.dialing .sim-call-state {
+            visibility: visible;
+        }
+
+        .sim-call-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #d8d8da;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #fff;
+            box-shadow: 0 7px 24px rgba(0, 0, 0, .08), 0 0 0 3px rgba(255, 255, 255, .76);
+            transition: transform .35s ease, opacity .35s ease;
+        }
+
+        .sim-call-overlay.dialing .sim-call-avatar {
+            animation: simCallDialPulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes simCallDialPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.035);
+            }
+        }
+
+        .sim-call-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sim-call-name {
+            margin-top: 13px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #29292b;
+        }
+
+        .sim-call-duration {
+            margin-top: 6px;
+            min-height: 15px;
+            font-size: 11px;
+            color: rgba(35, 35, 38, .46);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* 【本次修改：波形固定放在通话时间下方】 */
+        .sim-call-main-wave {
+            width: 92px;
+            height: 28px;
+            margin-top: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            opacity: 0;
+            transform: translateY(-3px);
+            transition: opacity .28s ease, transform .28s ease;
+        }
+
+        .sim-call-overlay.connected .sim-call-main-wave {
+            opacity: .74;
+            transform: translateY(0);
+        }
+
+        .sim-call-main-wave i {
+            display: block;
+            width: 2px;
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(68, 68, 72, .34);
+            transform-origin: center;
+            animation: simCallWave 1.05s ease-in-out infinite;
+        }
+
+        .sim-call-main-wave i:nth-child(1) {
+            height: 5px;
+            animation-delay: 0s;
+        }
+
+        .sim-call-main-wave i:nth-child(2) {
+            height: 10px;
+            animation-delay: .08s;
+        }
+
+        .sim-call-main-wave i:nth-child(3) {
+            height: 16px;
+            animation-delay: .16s;
+        }
+
+        .sim-call-main-wave i:nth-child(4) {
+            height: 9px;
+            animation-delay: .24s;
+        }
+
+        .sim-call-main-wave i:nth-child(5) {
+            height: 20px;
+            animation-delay: .32s;
+        }
+
+        .sim-call-main-wave i:nth-child(6) {
+            height: 12px;
+            animation-delay: .40s;
+        }
+
+        .sim-call-main-wave i:nth-child(7) {
+            height: 7px;
+            animation-delay: .48s;
+        }
+
+        .sim-call-main-wave i:nth-child(8) {
+            height: 15px;
+            animation-delay: .56s;
+        }
+
+        .sim-call-main-wave i:nth-child(9) {
+            height: 9px;
+            animation-delay: .64s;
+        }
+
+        .sim-call-overlay.speaking .sim-call-main-wave i {
+            animation-duration: .62s;
+            background: rgba(55, 55, 59, .48);
+        }
+
+        @keyframes simCallWave {
+
+            0%,
+            100% {
+                transform: scaleY(.48);
+                opacity: .42;
+            }
+
+            50% {
+                transform: scaleY(1.16);
+                opacity: .92;
+            }
+        }
+
+
+        /* 【本次修改：拨号阶段改为中部 Calling 连接动效】 */
+        .sim-call-dialing-mark {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 96px;
+            height: 96px;
+            width: 112px;
+            height: 112px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .28s ease;
+        }
+
+        .sim-call-overlay.dialing .sim-call-dialing-mark {
+            opacity: 1;
+            animation: simCallDialHeartbeat 1.45s ease-in-out infinite;
+        }
+
+        .sim-call-dialing-ring {
+            position: absolute;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            border: 1px solid rgba(70, 70, 75, .14);
+            animation: simCallDialRipple 2.15s ease-out infinite;
+        }
+
+        .sim-call-dialing-ring:nth-child(2) {
+            animation-delay: .72s;
+        }
+
+        .sim-call-dialing-ring:nth-child(3) {
+            animation-delay: 1.44s;
+        }
+
+        @keyframes simCallDialRipple {
+            0% {
+                transform: scale(.62);
+                opacity: 0;
+            }
+
+            18% {
+                opacity: .75;
+            }
+
+            100% {
+                transform: scale(1.85);
+                opacity: 0;
+            }
+        }
+
+        @keyframes simCallDialHeartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: .55;
+            }
+
+            45% {
+                transform: scale(1.04);
+                opacity: .82;
+            }
+
+            55% {
+                transform: scale(.99);
+                opacity: .65;
+            }
+
+            68% {
+                transform: scale(1.03);
+                opacity: .80;
+            }
+        }
+
+        .sim-call-message-stage {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            /* 【本次修改：字幕从波形下方开始，按从上到下的视觉方向出现】 */
+            align-items: flex-start;
+            justify-content: center;
+            padding: 30px 0 12px;
+        }
+
+        /* 【本次修改：去掉上下分隔线，改为纯文字记录式字幕】 */
+        .sim-call-message-wrap {
+            width: min(82%, 270px);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(-7px);
+            filter: blur(2px);
+            transition: opacity .42s ease, transform .42s ease, filter .42s ease;
+        }
+
+        .sim-call-message-wrap.visible {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+
+        .sim-call-message-wrap.leaving {
+            opacity: 0;
+            transform: translateY(10px);
+            filter: blur(1.5px);
+        }
+
+        .sim-call-message {
+            width: 100%;
+            padding: 4px 2px;
+            color: rgba(48, 48, 52, .72);
+            font-size: 13px;
+            line-height: 1.7;
+            text-align: center;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* 【本次修改：挂断按钮整体在现有基础上轻微上抬，内部电话图标继续保持上移校正】 */
+        .sim-call-end-btn {
+            width: 55px;
+            height: 55px;
+            border: none;
+            border-radius: 50%;
+            background: #ef5350;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transform: translateY(-4px);
+            box-shadow: 0 4px 18px rgba(239, 83, 80, .22);
+            cursor: pointer;
+        }
+
+        .sim-call-end-btn:active {
+            transform: translateY(-4px) scale(.94);
+        }
+
+        .sim-call-end-btn svg {
+            width: 25px;
+            height: 25px;
+            transform: translateY(-3px);
+        }
+
+        /* 【本次修改：不再显示“挂断”文字，只保留通用红色电话按钮】 */
+        .sim-call-end-label {
+            display: none;
+        }
+
+        /* 【本次修改：模拟语音通话 V2 页面 CSS 结束】 */
 
         html,
         body {
@@ -2344,6 +2959,445 @@
             /* ❗锁死滚动 */
             overscroll-behavior: none;
             touch-action: none;
+        }
+
+        /* 【本次修改：拨号阶段所有视觉元素严格以卡片中心为基准】 */
+        .sim-call-overlay.dialing .sim-call-card,
+        .sim-call-overlay.dialing .sim-call-main,
+        .sim-call-overlay.dialing .sim-call-content {
+            text-align: center;
+        }
+
+        .sim-call-overlay.dialing .sim-call-dialing-mark {
+            left: 50% !important;
+            top: 50% !important;
+            right: auto !important;
+            bottom: auto !important;
+            transform: translate(-50%, -50%) !important;
+        }
+
+
+        /* =====================================================
+           【本次修改：拨号中央“电话连接脉冲”动效开始】
+           仅覆盖拨号动画，不影响接通后的计时、波形和字卡。
+           ===================================================== */
+        .sim-call-dialing-mark {
+            position: absolute !important;
+            left: 50% !important;
+            top: 50% !important;
+            right: auto !important;
+            bottom: auto !important;
+            width: 112px !important;
+            height: 112px !important;
+            margin: 0 !important;
+            transform: translate(-50%, -50%) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+
+        /* 【本次修改：拨号中央“电话连接脉冲”动效结束】 */
+
+
+
+        /* =====================================================
+           【本次修改：通话字幕纵向记录式展示开始】
+           每轮预留最多5个纵向位置；上一条淡出完成后，下一条在下一个位置出现。
+           仅修改通话字幕展示，不修改原主动发送逻辑。
+           ===================================================== */
+        .sim-call-message-stage {
+            align-items: flex-start;
+            justify-content: center;
+            padding: 26px 0 10px;
+        }
+
+        .sim-call-message-wrap {
+            width: min(84%, 280px);
+            min-height: 190px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+            gap: 8px;
+            opacity: 1;
+            transform: none;
+            filter: none;
+        }
+
+        .sim-call-message-wrap.visible,
+        .sim-call-message-wrap.leaving {
+            opacity: 1;
+            transform: none;
+            filter: none;
+        }
+
+        .sim-call-record-slot {
+            min-height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sim-call-record-item {
+            width: 100%;
+            padding: 3px 2px;
+            color: rgba(48, 48, 52, .72);
+            font-size: 13px;
+            line-height: 1.55;
+            text-align: center;
+            white-space: pre-wrap;
+            word-break: break-word;
+            opacity: 0;
+            transform: translateY(-6px);
+            filter: blur(1.5px);
+            transition: opacity .42s ease, transform .42s ease, filter .42s ease;
+        }
+
+        .sim-call-record-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+
+        .sim-call-record-item.leaving {
+            opacity: 0;
+            transform: translateY(8px);
+            filter: blur(1px);
+        }
+
+        /* 【本次修改：通话字幕纵向记录式展示结束】 */
+
+
+        /* =====================================================
+           【本次修改：拨号中央稳定波形动效开始】
+           只影响拨号阶段；接通后的通话波形保持不变。
+           ===================================================== */
+        .sim-call-dialing-mark {
+            position: absolute !important;
+            left: 50% !important;
+            top: 50% !important;
+            right: auto !important;
+            bottom: auto !important;
+            width: 94px !important;
+            height: 54px !important;
+            margin: 0 !important;
+            transform: translate(-50%, -50%) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 6px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .sim-call-overlay.dialing .sim-call-dialing-mark {
+            opacity: 1;
+            animation: none !important;
+        }
+
+        .sim-call-dial-bar {
+            width: 4px;
+            height: 13px;
+            border-radius: 999px;
+            background: rgba(70, 70, 74, .34);
+            transform-origin: center;
+            animation: simCallDialStableWave 1.15s ease-in-out infinite;
+        }
+
+        .sim-call-dial-bar:nth-child(2) {
+            animation-delay: .08s;
+        }
+
+        .sim-call-dial-bar:nth-child(3) {
+            animation-delay: .16s;
+        }
+
+        .sim-call-dial-bar:nth-child(4) {
+            animation-delay: .24s;
+        }
+
+        .sim-call-dial-bar:nth-child(5) {
+            animation-delay: .32s;
+        }
+
+        .sim-call-dial-bar:nth-child(6) {
+            animation-delay: .40s;
+        }
+
+        .sim-call-dial-bar:nth-child(7) {
+            animation-delay: .48s;
+        }
+
+        @keyframes simCallDialStableWave {
+
+            0%,
+            100% {
+                transform: scaleY(.62);
+                opacity: .32;
+            }
+
+            50% {
+                transform: scaleY(2.05);
+                opacity: .78;
+            }
+        }
+
+        /* 【本次修改：拨号中央稳定波形动效结束】 */
+
+
+        /* =====================================================
+           【本次修改：双字幕中央布局开始】
+           字幕字号保持不变，只调整显示区域和位置。
+           ===================================================== */
+        .sim-call-message-stage {
+            display: flex;
+            align-items: center !important;
+            justify-content: center;
+            padding: 0 !important;
+            transform: translateY(-46px);
+            /* 【本次修改：双字幕区域继续上移，接近原五条模式第一条位置】 */
+        }
+
+        .sim-call-message-wrap {
+            width: min(82%, 270px);
+            min-height: 82px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+        }
+
+        .sim-call-record-slot {
+            width: 100%;
+            min-height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* 【本次修改：双字幕中央布局结束】 */
+
+
+        /* 【本次修改：历史消息浏览 / 引用定位 / 长按操作；仅新增，不改原聊天 UI】 */
+        /* 【本次修改：最新消息按钮】增加与边界距离、减轻阴影、缩小箭头；其余逻辑不动 */
+        /* 【本次修改：定位到最新消息按钮】 */
+        .jump-latest-btn {
+            position: absolute;
+            right: 22px;
+            bottom: 22px;
+            z-index: 8;
+
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+
+            border: 1px solid rgba(0, 0, 0, .05);
+            background: rgba(255, 255, 255, .95);
+            box-shadow: 0 2px 7px rgba(0, 0, 0, .055);
+
+            display: none;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0 0 2px 0;
+            /* 箭头视觉上移一点 */
+            color: #555;
+            font-size: 13px;
+            font-weight: 600;
+            /* 箭头稍微加粗 */
+            line-height: 1;
+
+            cursor: pointer;
+        }
+
+        .jump-latest-btn.visible {
+            display: flex;
+        }
+
+        .jump-latest-btn:active {
+            transform: scale(.94);
+        }
+
+        /* 【本次修改：仅调整长按操作栏设计；不改引用/撤回/解析等功能逻辑】 */
+        .message-action-menu {
+            position: absolute;
+            z-index: 15000;
+            display: none;
+            align-items: center;
+            background: rgba(255, 255, 255, .985);
+            border: 1px solid rgba(0, 0, 0, .045);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .055);
+            overflow: visible;
+            padding: 2px 3px;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        .message-action-menu.active {
+            display: flex
+        }
+
+        .message-action-menu::after {
+            content: "";
+            position: absolute;
+            left: var(--action-arrow-x, 18px);
+            bottom: -3px;
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, .985);
+            border-right: 1px solid rgba(0, 0, 0, .035);
+            border-bottom: 1px solid rgba(0, 0, 0, .035);
+            transform: rotate(45deg);
+        }
+
+        .action-menu-item {
+            border: 0;
+            background: transparent;
+            padding: 5px 8px;
+            font-size: 10px;
+            line-height: 1;
+            color: #555;
+            border-radius: 7px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .action-menu-item+.action-menu-item {
+            border-left: 1px solid rgba(0, 0, 0, .045);
+        }
+
+        .action-menu-item:active {
+            background: rgba(0, 0, 0, .025)
+        }
+
+        .message-locate-flash {
+            animation: messageLocateFlash 1.2s ease
+        }
+
+        @keyframes messageLocateFlash {
+
+            0%,
+            100% {
+                filter: none
+            }
+
+            35% {
+                filter: brightness(.9)
+            }
+        }
+
+        .manual-quote-preview {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: rgba(248, 248, 248, .96);
+            border-top: 1px solid rgba(0, 0, 0, .04);
+            font-size: 10px;
+            color: #666
+        }
+
+        .manual-quote-preview.active {
+            display: flex
+        }
+
+        .manual-quote-preview-text {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        .manual-quote-cancel {
+            border: 0;
+            background: transparent;
+            font-size: 16px;
+            color: #999;
+            padding: 0 2px
+        }
+
+        /* 【本次修改：引用图片/表情包缩略图固定尺寸；全屏预览仍按原图比例】 */
+        .quoted-content .quoted-text img.quoted-image {
+            width: 64px !important;
+            height: 64px !important;
+            max-width: 64px !important;
+            max-height: 64px !important;
+            object-fit: cover !important
+        }
+
+        /* 【本次修改：通话结束 / 撤回记录完全复用时间戳胶囊视觉】 */
+        .call-event-row {
+            text-align: center;
+            margin: 12px 0;
+            font-size: 9px;
+            color: #8e8e93;
+            position: relative;
+        }
+
+        .call-event-row span {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background-color: #ededed;
+            line-height: 1.4;
+        }
+
+        /* 【本次修改：禁止 iPhone/Safari 长按图片弹出系统保存菜单；不改图片点击预览】 */
+        .chat-area img {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        /* 【本次修改：主动来电弹窗只新增必要样式，复用现有通话视觉】 */
+        .incoming-call-actions {
+            display: flex;
+            justify-content: center;
+            gap: 58px;
+            margin-top: auto;
+            padding-bottom: 26px
+        }
+
+        .incoming-call-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 7px;
+            font-size: 10px;
+            color: #666
+        }
+
+        .incoming-call-action button {
+            width: 52px;
+            height: 52px;
+            border: 0;
+            border-radius: 50%;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, .10)
+        }
+
+        .incoming-call-action svg {
+            width: 24px;
+            height: 24px
+        }
+
+        .incoming-call-decline {
+            background: #ef5350
+        }
+
+        .incoming-call-accept {
+            background: #4caf50;
+            transform: rotate(180deg)
         }
     </style>
 </head>
@@ -2359,37 +3413,74 @@
     <div class="overlay" id="overlay"></div>
     <div class="container" id="mainContainer">
 
-        <!-- 顶部 Header（只放 header） -->
-        <div class="header-card">
-            <div class="header">
-                <div class="header-left">
-                    <div class="avatar-container" id="avatarContainer">
+        <div class="header">
 
-                        <!-- 头像 + 在线状态包裹 -->
-                        <div class="avatar-wrapper">
-                            <div class="avatar" id="botAvatar">
-                                <!-- 头像图片将在这里显示 -->
-                            </div>
+            <!-- 左侧按钮（占位） -->
+            <div class="header-left">
+                <button class="header-left-btn" aria-label="like">
+                    <svg class="header-left-icon" width="24" height="24" viewBox="0 0 40 40" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M34.7333 7.68332C33.8821 6.83166 32.8714 6.15607 31.7589 5.69513C30.6465 5.23419 29.4541 4.99695 28.25 4.99695C27.0459 4.99695 25.8535 5.23419 24.7411 5.69513C23.6286 6.15607 22.6179 6.83166 21.7667 7.68332L20 9.44999L18.2333 7.68332C16.5138 5.96384 14.1817 4.99784 11.75 4.99784C9.31827 4.99784 6.98615 5.96384 5.26666 7.68332C3.54717 9.40281 2.58118 11.7349 2.58118 14.1667C2.58118 16.5984 3.54717 18.9305 5.26666 20.65L20 35.3833L34.7333 20.65C35.585 19.7987 36.2606 18.788 36.7215 17.6756C37.1825 16.5632 37.4197 15.3708 37.4197 14.1667C37.4197 12.9625 37.1825 11.7702 36.7215 10.6577C36.2606 9.5453 35.585 8.53458 34.7333 7.68332Z"
+                            fill="currentColor" />
+                    </svg>
+                </button>
+            </div>
 
-                            <!-- 在线状态点 -->
-                            <span class="online-status"></span>
-                        </div>
+            <!-- 中心区域（绝对居中锚点） -->
+            <div class="header-center">
 
-                        <div class="chat-info">
-                            <div class="chat-title" id="botName">聊天伙伴</div>
-                            <div class="chat-status" id="chatStatus">在线</div>
-                        </div>
+                <div class="avatar-container" id="avatarContainer">
+                    <!-- 左侧：活动状态图标 -->
+                    <div class="voice-indicator">
+                        <svg class="voice-icon" width="18" height="18" viewBox="0 0 46 46" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M34.5 38.3334V19.1667
+                   M23 38.3334V7.66669
+                   M11.5 38.3334V26.8334" stroke="currentColor" stroke-width="3.25" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
                     </div>
-                </div>
+                    <!-- 角色信息（左侧） -->
+                    <div class="chat-info chat-info-left">
+                        <div class="chat-title" id="botName">聊天伙伴</div>
+                    </div>
 
-                <div class="header-right">
-                    <button class="settings-btn">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
+                    <!-- 头像 + 状态点（真正中心锚点） -->
+                    <div class="avatar-wrapper">
+                        <div class="avatar" id="botAvatar"></div>
+                        <span class="online-status"></span>
+                    </div>
+
+                    <!-- 状态文字（右侧） -->
+                    <div class="chat-info chat-info-right">
+                        <div class="chat-status" id="chatStatus">OnLine</div>
+                    </div>
+
                 </div>
             </div>
+
+            <!-- 右侧：设置按钮 -->
+            <div class="header-right">
+                <button class="settings-btn" aria-label="settings">
+                    <svg class="settings-icon" width="24" height="24" viewBox="0 0 67 67" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M33.5 36.2917C35.0418 36.2917 36.2917 35.0418 36.2917 33.5C36.2917 31.9582 35.0418 30.7084 33.5 30.7084C31.9582 30.7084 30.7083 31.9582 30.7083 33.5C30.7083 35.0418 31.9582 36.2917 33.5 36.2917Z"
+                            stroke="currentColor" stroke-width="5.58333" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path
+                            d="M33.5 16.75C35.0418 16.75 36.2917 15.5001 36.2917 13.9584C36.2917 12.4166 35.0418 11.1667 33.5 11.1667C31.9582 11.1667 30.7083 12.4166 30.7083 13.9584C30.7083 15.5001 31.9582 16.75 33.5 16.75Z"
+                            stroke="currentColor" stroke-width="5.58333" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path
+                            d="M33.5 55.8334C35.0418 55.8334 36.2917 54.5835 36.2917 53.0417C36.2917 51.4999 35.0418 50.25 33.5 50.25C31.9582 50.25 30.7083 51.4999 30.7083 53.0417C30.7083 54.5835 31.9582 55.8334 33.5 55.8334Z"
+                            stroke="currentColor" stroke-width="5.58333" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+
         </div>
 
 
@@ -2399,8 +3490,14 @@
             <div class="chat-area" id="chatArea">
                 <!-- 聊天消息 -->
             </div>
+            <!-- 【本次修改：查看历史消息时才出现，点击回到最新】 -->
+            <button class="jump-latest-btn" id="jumpLatestBtn" type="button" aria-label="回到最新消息">↓</button>
         </div>
 
+        <!-- 【本次修改：手动引用预览】 -->
+        <div class="manual-quote-preview" id="manualQuotePreview"><span class="manual-quote-preview-text"
+                id="manualQuotePreviewText"></span><button class="manual-quote-cancel" id="manualQuoteCancel"
+                type="button">×</button></div>
         <!-- 底部输入区（系统层，纯白） -->
         <div class="input-card">
 
@@ -2429,11 +3526,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Home Indicator 上方的静态标签 -->
-        <div class="input-footer-label">
-            • Have a nice day •
         </div>
 
         <!-- =========================
@@ -2705,6 +3797,15 @@
                     </div>
                 </div>
 
+                <!-- 【本次修改：每位好友独立保存主动来电开关】 -->
+                <div class="setting-section">
+                    <h3>主动来电设置</h3>
+                    <div class="toggle-container"><span class="toggle-label">角色主动发起通话</span><label
+                            class="toggle-switch"><input type="checkbox" id="incomingCallToggle"><span
+                                class="toggle-slider"></span></label></div>
+                    <div class="toggle-description">开启后，此角色会在页面打开期间随机来电</div>
+                </div>
+
                 <!-- 主动发送消息开关 -->
                 <div class="setting-section">
                     <h3>主动发送消息设置</h3>
@@ -2886,10 +3987,81 @@
             消息内容已复制到剪贴板！
         </div>
 
-        <!-- 消息操作菜单 -->
-        <div class="message-action-menu" id="messageActionMenu">
-            <button class="action-menu-item" id="copyMessageBtn">复制</button>
+
+
+        <!-- ==========================
+             【本次修改：模拟语音通话 V2 页面 开始】
+             拨号阶段 → 接通后的计时、波形与字幕字卡
+             ========================== -->
+        <div class="sim-call-overlay" id="simCallOverlay" aria-hidden="true">
+            <div class="sim-call-background" id="simCallBackground"></div>
+            <div class="sim-call-panel">
+                <div class="sim-call-state" id="simCallState">语音通话中</div>
+                <div class="sim-call-avatar" id="simCallAvatar"></div>
+                <div class="sim-call-name" id="simCallName">聊天伙伴</div>
+                <div class="sim-call-duration" id="simCallDuration"></div>
+
+                <div class="sim-call-main-wave" id="simCallMainWave" aria-hidden="true">
+                    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                </div>
+
+                <!-- 【本次修改：拨号中央改回稳定波形动效】 -->
+                <div class="sim-call-dialing-mark" aria-hidden="true">
+                    <span class="sim-call-dial-bar"></span>
+                    <span class="sim-call-dial-bar"></span>
+                    <span class="sim-call-dial-bar"></span>
+                    <span class="sim-call-dial-bar"></span>
+                    <span class="sim-call-dial-bar"></span>
+                    <span class="sim-call-dial-bar"></span>
+                    <span class="sim-call-dial-bar"></span>
+                </div>
+
+                <div class="sim-call-message-stage">
+                    <!-- 【本次修改：通话字幕改为每轮最多5个纵向记录位置】 -->
+                    <div class="sim-call-message-wrap" id="simCallMessageWrap"></div>
+                </div>
+
+                <button class="sim-call-end-btn" id="simCallEndBtn" type="button" aria-label="挂断">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M5.2 14.8c4.4-3.5 9.2-3.5 13.6 0" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" />
+                        <path d="M7.1 13.8 5.4 17M16.9 13.8l1.7 3.2" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
         </div>
+        <!-- 【本次修改：模拟语音通话 V2 页面 结束】 -->
+
+
+        <!-- 【本次修改：长按消息操作栏】 -->
+        <div class="message-action-menu" id="messageActionMenu"></div>
+        <!-- 【本次修改：角色主动来电；接听后复用现有通话界面】 -->
+        <div class="sim-call-overlay incoming-call-overlay" id="incomingCallOverlay" aria-hidden="true">
+            <div class="sim-call-background" id="incomingCallBackground"></div>
+            <div class="sim-call-panel">
+                <div class="sim-call-state">正在来电</div>
+                <div class="sim-call-avatar" id="incomingCallAvatar"></div>
+                <div class="sim-call-name" id="incomingCallName">聊天伙伴</div>
+                <div class="sim-call-duration" id="incomingCallDuration">00:00</div>
+                <div class="incoming-call-actions">
+                    <div class="incoming-call-action"><button class="incoming-call-decline" id="incomingCallDecline"
+                            type="button"><svg viewBox="0 0 24 24" fill="none">
+                                <path d="M5.2 14.8c4.4-3.5 9.2-3.5 13.6 0M7.1 13.8 5.4 17M16.9 13.8l1.7 3.2"
+                                    stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+                            </svg></button><span>拒接</span></div>
+                    <div class="incoming-call-action"><button class="incoming-call-accept" id="incomingCallAccept"
+                            type="button"><svg viewBox="0 0 24 24" fill="none">
+                                <path d="M5.2 14.8c4.4-3.5 9.2-3.5 13.6 0M7.1 13.8 5.4 17M16.9 13.8l1.7 3.2"
+                                    stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+                            </svg></button><span>接听</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="image-preview hidden" id="imagePreview">
+            <img id="imagePreviewImg">
+        </div>
+
     </div>
 
     <!-- JavaScript 代码 -->
@@ -2899,11 +4071,11 @@
         // Voice Record Global State
         // ==========================
         let lastRenderedDate = null;
-        //let mediaRecorder = null;
-        //let audioChunks = [];
-        //let recordStartTime = 0;
-        //let recordStream = null; // ✅ 新增：保存 stream
-        //let isRecording = false;
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let recordStartTime = 0;
+        let recordStream = null; // ✅ 新增：保存 stream
+        let isRecording = false;
 
         // 初始化数据
         let appData = {
@@ -2925,6 +4097,7 @@
                     settings: {
                         multiMessageEnabled: true,
                         activeSending: false,
+                        incomingCallEnabled: false, // 【本次修改：角色主动来电默认关闭】
                         enableQuoteReply: true,
                         phrases: ["你好！", "今天过得怎么样？", "有什么新鲜事吗？", "很高兴和你聊天！", "最近在忙什么？"],
                         stickers: []
@@ -2935,14 +4108,34 @@
 
         // DOM元素 - 保持不变...
         const chatArea = document.getElementById('chatArea');
+        const jumpLatestBtn = document.getElementById('jumpLatestBtn'); // 【本次修改】
+        const messageActionMenu = document.getElementById('messageActionMenu');
+        const manualQuotePreview = document.getElementById('manualQuotePreview');
+        const manualQuotePreviewText = document.getElementById('manualQuotePreviewText');
+        const manualQuoteCancel = document.getElementById('manualQuoteCancel');
         const messageInput = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
-        // const voiceBtn = document.getElementById('voiceBtn'); // 👈 就加在这一堆里
+        const voiceBtn = document.getElementById('voiceBtn'); // 👈 就加在这一堆里
         const settingsBtn = document.querySelector('.settings-btn');
         const settingsPanel = document.getElementById('settingsPanel');
         const closeSettings = document.querySelector('.close-settings');
         const stickerBtn = document.querySelector('.tool-sticker-btn');
         const imageBtn = document.querySelector('.tool-image-btn');
+
+        // 【本次修改：模拟语音通话 V2 DOM 引用 开始】
+        const callBtn = document.querySelector('.tool-call-btn');
+        const simCallOverlay = document.getElementById('simCallOverlay');
+        const simCallBackground = document.getElementById('simCallBackground');
+        const simCallAvatar = document.getElementById('simCallAvatar');
+        const simCallName = document.getElementById('simCallName');
+        const simCallState = document.getElementById('simCallState');
+        const simCallDuration = document.getElementById('simCallDuration');
+        const simCallMainWave = document.getElementById('simCallMainWave');
+        const simCallMessageWrap = document.getElementById('simCallMessageWrap');
+        const simCallMessage = document.getElementById('simCallMessage'); // 【本次修改：兼容旧结构；纵向记录版不再直接使用】
+        const simCallEndBtn = document.getElementById('simCallEndBtn');
+        const incomingCallOverlay = document.getElementById('incomingCallOverlay'), incomingCallBackground = document.getElementById('incomingCallBackground'), incomingCallAvatar = document.getElementById('incomingCallAvatar'), incomingCallName = document.getElementById('incomingCallName'), incomingCallDuration = document.getElementById('incomingCallDuration'), incomingCallDecline = document.getElementById('incomingCallDecline'), incomingCallAccept = document.getElementById('incomingCallAccept');
+        // 【本次修改：模拟语音通话 V2 DOM 引用 结束】
         const stickerPicker = document.getElementById('stickerPicker');
         const imageFileInput = document.getElementById('imageFileInput');
         const botNameElement = document.getElementById('botName');
@@ -2951,6 +4144,7 @@
         const userNameInput = document.getElementById('userNameInput');
         const multiMessageToggle = document.getElementById('multiMessageToggle');
         const activeSendingToggle = document.getElementById('activeSendingToggle');
+        const incomingCallToggle = document.getElementById('incomingCallToggle');
         const quoteReplyToggle = document.getElementById('quoteReplyToggle');
         const clearHistoryBtn = document.getElementById('clearHistoryBtn');
         const exportHistoryBtn = document.getElementById('exportHistoryBtn');
@@ -2995,12 +4189,6 @@
         const optimizationInfo = document.getElementById('optimizationInfo');
         const indexeddbStatus = document.getElementById('indexeddbStatus');
 
-        // 消息操作菜单相关元素
-        const messageActionMenu = document.getElementById('messageActionMenu');
-        const copyMessageBtn = document.getElementById('copyMessageBtn');
-
-        // 当前选中的消息
-        let currentSelectedMessage = null;
 
         // 头像设置相关元素
         const avatarFileInput = document.getElementById('avatarFileInput');
@@ -3057,6 +4245,32 @@
         let replyTaskQueues = {}; // 各好友的回复任务队列
         let activeSendingTimers = {}; // 各好友的主动发送定时器
         let isProcessingQueues = {}; // 各好友的队列处理状态
+
+        // ==========================
+        // 【本次修改：模拟语音通话 V2 临时状态 开始】
+        // 不写入 IndexedDB，刷新页面后自动结束通话
+        // ==========================
+        let simCallActive = false;
+        let simCallConnected = false;
+        let simCallFriendId = null;
+        let simCallConnectTimer = null;
+        let simCallPhraseTimer = null;
+        // 【本次修改：保存同一轮 1-5 条字卡的延迟任务，挂断时统一清除】
+        let simCallBatchTimers = [];
+        let simCallBubbleTimer = null;
+        let simCallClockTimer = null;
+        let simCallDialClockTimer = null; // 【本次修改：拨号等待秒数计时器】
+        let simCallDialStartedAt = 0; // 【本次修改：记录拨号开始时间】
+        let simCallStartedAt = 0;
+
+        // 【本次修改：用于作废通话前遗留的普通聊天异步任务】
+        let replyQueueGeneration = {};
+        // 【本次修改：历史浏览、手动引用、主动来电临时状态】
+        let manualQuoteTarget = null;
+        let isViewingHistory = false;
+        let incomingCallTimers = {};
+        let incomingCallFriendId = null, incomingCallClockTimer = null, incomingCallStartedAt = 0;
+        // 【本次修改：模拟语音通话 V2 临时状态 结束】
 
         // 初始化IndexedDB
         function initIndexedDB() {
@@ -3199,7 +4413,7 @@
                     renderSettings();
 
                     // 重置状态栏为在线
-                    chatStatus.textContent = "在线";
+                    chatStatus.textContent = "OnLine";
 
                     // 重新启动所有好友的主动发送（如果开启）
                     restartAllActiveSending();
@@ -3220,7 +4434,7 @@
             renderSettings();
 
             // 重置状态栏为在线
-            chatStatus.textContent = "在线";
+            chatStatus.textContent = "OnLine";
 
             // 启动所有好友的主动发送（如果开启）
             restartAllActiveSending();
@@ -3233,6 +4447,8 @@
                 replyTaskQueues[friendId] = [];
                 activeSendingTimers[friendId] = null;
                 isProcessingQueues[friendId] = false;
+                // 【本次修改：初始化普通聊天任务代次，用于通话时作废旧任务】
+                replyQueueGeneration[friendId] = replyQueueGeneration[friendId] || 0;
 
                 // 确保好友对象有unreadCount属性
                 if (!appData.friends[friendId].hasOwnProperty('unreadCount')) {
@@ -3323,6 +4539,8 @@
                         lastMessageText = lastMessage.content;
                     } else if (lastMessage.type === 'sticker') {
                         lastMessageText = '[表情包]';
+                    } else if (lastMessage.type === 'voice') {
+                        lastMessageText = '[语音消息]'; // 【本次修改：好友列表/未读摘要显示语音消息】
                     }
 
                     // 截断过长的消息
@@ -3396,9 +4614,9 @@
             // 检查当前好友是否有正在处理的任务队列
             if (isProcessingQueues[currentFriendId] ||
                 (replyTaskQueues[currentFriendId] && replyTaskQueues[currentFriendId].length > 0)) {
-                chatStatus.textContent = "对方正在输入...";
+                chatStatus.textContent = "Typing💬";
             } else {
-                chatStatus.textContent = "在线";
+                chatStatus.textContent = "OnLine";
             }
         }
 
@@ -3420,6 +4638,7 @@
                 settings: {
                     multiMessageEnabled: true,
                     activeSending: false,
+                    incomingCallEnabled: false,
                     enableQuoteReply: true,
                     phrases: ["你好！", "今天过得怎么样？", "有什么新鲜事吗？", "很高兴和你聊天！", "最近在忙什么？"],
                     stickers: []
@@ -3430,6 +4649,8 @@
             replyTaskQueues[friendId] = [];
             activeSendingTimers[friendId] = null;
             isProcessingQueues[friendId] = false;
+            // 【本次修改：为新好友初始化普通聊天任务代次】
+            replyQueueGeneration[friendId] = 0;
 
             saveData();
             renderFriendsList();
@@ -3481,16 +4702,33 @@
                 container.textContent = msg.content;
 
             } else if (msg.type === 'image') {
-                container.innerHTML =
-                    `<img src="${msg.content}" style="max-width:200px;border-radius:5px;">`;
+                const img = document.createElement('img');
+                img.src = msg.content;
+                img.className = 'chat-image-thumb';
+
+                img.addEventListener('click', () => {
+                    openImagePreview(msg.content);
+                });
+
+                container.appendChild(img);
 
             } else if (msg.type === 'emoji') {
                 container.innerHTML =
                     `<div style="font-size:13px;line-height:1.4;">${msg.content}</div>`;
 
             } else if (msg.type === 'sticker') {
-                container.innerHTML =
-                    `<img src="${msg.content}" style="max-width:100px;border-radius:5px;">`;
+                const img = document.createElement('img');
+                img.src = msg.content;
+                img.className = 'chat-sticker';
+
+                img.addEventListener('click', () => {
+                    openImagePreview(msg.content, 'sticker');
+                });
+
+                container.appendChild(img);
+
+            } else if (msg.type === 'voice') {
+                renderVoiceContent(container, msg);
             }
         }
 
@@ -3507,6 +4745,15 @@
                 hour: '2-digit',
                 minute: '2-digit'
             });
+
+            // 【本次修改：通话结束 / 撤回记录本身就是“时间戳位置”的胶囊，不再额外生成普通时间戳】
+            if (msg.type === 'call_event' || msg.type === 'recall_event') {
+                const row = document.createElement('div');
+                row.className = 'call-event-row';
+                row.innerHTML = `<span>${msg.content || (msg.type === 'recall_event' ? '你撤回了一条消息' : '通话结束')}</span>`;
+                fragment.appendChild(row);
+                return fragment;
+            }
 
             // ===== 时间分割线（只在需要时插入）=====
             if (
@@ -3537,6 +4784,7 @@
             const messageContainer = document.createElement('div');
             messageContainer.className =
                 `message-container ${msg.sender}-container`;
+            messageContainer.dataset.messageIndex = String(index);
 
             /*// ===== 头像合并判断 =====
             let showAvatar = true;
@@ -3604,8 +4852,7 @@
 
             // 4️⃣ 判断是否无气泡
             const isNoBubble =
-                msg.type === 'image' ||
-                msg.type === 'sticker';
+                (msg.type === 'image' || msg.type === 'sticker') && !msg.quote;
 
             // 5️⃣ 设置气泡 class
             messageDiv.className =
@@ -3621,6 +4868,8 @@
 
                 const quotedContent = document.createElement('div');
                 quotedContent.className = 'quoted-content';
+                quotedContent.style.cursor = 'pointer';
+                quotedContent.addEventListener('click', (e) => { if (e.target.closest('img')) return; e.stopPropagation(); locateQuotedMessage(msg); });
 
                 const quoteSender = document.createElement('div');
                 quoteSender.className = 'quote-sender';
@@ -3638,6 +4887,8 @@
                     img.src = msg.quote;
                     img.className = 'quoted-image';
                     quoteText.appendChild(img);
+                } else if (msg.quoteType === 'voice') {
+                    quoteText.textContent = '（语音消息）'; // 【本次修改：引用语音消息时显示占位文字】
                 } else {
                     quoteText.textContent =
                         msg.quote.length > 50
@@ -3654,13 +4905,29 @@
                 messageWithQuote.appendChild(quotedContent);
                 messageWithQuote.appendChild(mainContent);
                 messageDiv.appendChild(messageWithQuote);
+                // ===== 让「引用消息里的图片 / 表情包」可点击预览 =====
+                const quotedImgs = quotedContent.querySelectorAll('img');
+
+                quotedImgs.forEach(img => {
+                    img.style.cursor = 'pointer';
+
+                    img.addEventListener('click', (e) => {
+                        e.stopPropagation(); // 不影响外层消息
+
+                        const isSticker = msg.quoteType === 'sticker';
+
+                        openImagePreview(
+                            img.src,
+                            isSticker ? 'sticker' : 'image'
+                        );
+                    });
+                });
 
             } else {
                 // ===== 无引用 =====
                 renderMessageContent(messageDiv, msg);
             }
 
-            messageDiv.addEventListener('click', handleMessageClick);
 
             // 6️⃣ 按 sender 组合顺序
             if (msg.sender === 'user') {
@@ -3706,32 +4973,7 @@
 
             // 全量渲染完，直接滚到底
             chatArea.scrollTop = chatArea.scrollHeight;
-        }
-
-        // 点击消息事件处理
-        function handleMessageClick(e) {
-            const messageDiv = e.currentTarget;
-            const messageId = parseInt(messageDiv.getAttribute('data-message-id'));
-            const currentFriend = getCurrentFriend();
-            const message = currentFriend.messages[messageId];
-
-            // 保存当前消息信息
-            currentSelectedMessage = {
-                id: messageId,
-                sender: message.sender === 'user' ? appData.userName : currentFriend.name,
-                content: message.content
-            };
-
-            // 获取消息元素位置
-            const rect = messageDiv.getBoundingClientRect();
-
-            // 设置菜单位置
-            messageActionMenu.style.top = `${rect.top - 35}px`;
-            messageActionMenu.style.left = `${rect.left}px`;
-            messageActionMenu.style.display = 'flex';
-
-            // 阻止事件冒泡
-            e.stopPropagation();
+            isViewingHistory = false; updateJumpLatestButton();
         }
 
         // 计算时间差（分钟）——保持不变
@@ -3830,6 +5072,19 @@
             isDragging = false;
         });
 
+        //图片放大预览。
+        const imagePreview = document.getElementById('imagePreview');
+        const imagePreviewImg = document.getElementById('imagePreviewImg');
+
+        function openImagePreview(src) {
+            imagePreviewImg.src = src;
+            imagePreview.classList.remove('hidden');
+        }
+
+        imagePreview.addEventListener('click', () => {
+            imagePreview.classList.add('hidden');
+        });
+
         // 渲染设置界面
         function renderSettings() {
             const currentFriend = getCurrentFriend();
@@ -3847,6 +5102,7 @@
             userNameInput.value = appData.userName;
             multiMessageToggle.checked = currentFriend.settings.multiMessageEnabled;
             activeSendingToggle.checked = currentFriend.settings.activeSending;
+            incomingCallToggle.checked = !!currentFriend.settings.incomingCallEnabled;
             quoteReplyToggle.checked = currentFriend.settings.enableQuoteReply;
             useCustomBackgroundToggle.checked = currentFriend.useCustomBackground;
 
@@ -3934,15 +5190,137 @@
                 `;
                 imgElement.addEventListener('click', () => {
                     sendMessage(sticker, 'sticker');
-                    stickerPicker.classList.add('hidden');
                 });
                 stickerPicker.appendChild(imgElement);
             });
         }
 
+        //开始录音。
+        async function startVoiceRecord() {
+            try {
+                recordStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+                let options = {};
+
+                if (MediaRecorder.isTypeSupported('audio/mp4;codecs=mp4a.40.2')) {
+                    options = { mimeType: 'audio/mp4;codecs=mp4a.40.2' };
+                } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+                    options = { mimeType: 'audio/mp4' };
+                } else if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+                    options = { mimeType: 'audio/webm;codecs=opus' };
+                } else {
+                    options = { mimeType: 'audio/webm' };
+                }
+
+                mediaRecorder = new MediaRecorder(recordStream, options);
+
+                audioChunks = [];
+                recordStartTime = Date.now();
+
+                mediaRecorder.ondataavailable = (e) => {
+                    if (e.data && e.data.size > 0) {
+                        audioChunks.push(e.data);
+                    }
+                };
+
+                mediaRecorder.start();
+
+            } catch (err) {
+                console.error('麦克风权限被拒绝', err);
+                isRecording = false;
+                alert('需要麦克风权限才能录音');
+            }
+        }
+
+
+        //停止录音。
+        function stopVoiceRecord() {
+            return new Promise((resolve, reject) => {
+                if (!mediaRecorder) {
+                    reject('mediaRecorder 不存在');
+                    return;
+                }
+
+                mediaRecorder.onstop = async () => {
+                    try {
+                        const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType });
+                        const base64Audio = await blobToBase64(blob);
+
+                        const duration = Math.max(
+                            1,
+                            Math.round((Date.now() - recordStartTime) / 1000)
+                        );
+
+                        if (recordStream) {
+                            recordStream.getTracks().forEach(track => track.stop());
+                            recordStream = null;
+                        }
+
+                        mediaRecorder = null;
+                        audioChunks = [];
+
+                        resolve({
+                            sender: 'user',
+                            type: 'voice',
+                            content: {
+                                audio: base64Audio,
+                                duration
+                            },
+                            timestamp: Date.now()
+                        });
+
+                    } catch (err) {
+                        reject(err);
+                    }
+                };
+
+                mediaRecorder.stop();
+            });
+        }
+
+        //点击/生成语音对象消息。
+        voiceBtn.addEventListener('click', async () => {
+            if (!isRecording) {
+                isRecording = true;
+                await startVoiceRecord();
+            } else {
+                isRecording = false;
+
+                try {
+                    const msg = await stopVoiceRecord();
+
+                    const friend = appData.friends[appData.currentFriendId];
+                    friend.messages.push(msg);
+
+                    await saveData();
+                    addMessageToChat(msg);
+                    /* 【本次修改：我主动发送语音后也强制滚到最新一条】 */
+                    isViewingHistory = false;
+                    requestAnimationFrame(() => {
+                        chatArea.scrollTop = chatArea.scrollHeight;
+                        updateJumpLatestButton();
+                    });
+
+                    createReplyTask(friend.id, msg);
+
+                } catch (e) {
+                    console.warn('录音失败', e);
+                    alert('录音失败，请重试');
+                }
+            }
+        });
+        //转格式。
+        function blobToBase64(blob) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(blob);
+            });
+        }
+
         // 发送消息
         async function sendMessage(content, type = 'text') {
-            if (!content.trim() && type !== 'image' && type !== 'sticker' && type !== 'sticker') return;
+            if (!content.trim() && type !== 'image' && type !== 'sticker' && type !== 'voice') return;
 
             const currentFriend = getCurrentFriend();
 
@@ -3952,9 +5330,20 @@
                 content: content,
                 timestamp: Date.now()
             };
+            // 【本次修改：手动引用始终引用目标消息“最新正文”，不套娃旧引用】
+            if (manualQuoteTarget) {
+                userMessage.quote = quoteSummary(manualQuoteTarget.msg); userMessage.quoteType = manualQuoteTarget.msg.type; userMessage.quoteSender = manualQuoteTarget.msg.sender === 'user' ? appData.userName : currentFriend.name; userMessage.quoteTargetTimestamp = manualQuoteTarget.msg.timestamp;
+                clearManualQuote();
+            }
 
             currentFriend.messages.push(userMessage);
             addMessageToChat(userMessage);
+            /* 【本次修改：只有“我主动发送消息”时，强制回到最新一条；角色新消息仍保留历史浏览位置】 */
+            isViewingHistory = false;
+            requestAnimationFrame(() => {
+                chatArea.scrollTop = chatArea.scrollHeight;
+                updateJumpLatestButton();
+            });
 
             // 保存数据（包括用户消息）
             await saveData();
@@ -3970,6 +5359,8 @@
 
         // 创建回复任务（使用临时状态）
         function createReplyTask(friendId, userMessage) {
+            // 【新增：通话中暂停普通聊天回复；任务仍保留，挂断后继续】
+            // 此处不丢弃用户消息，只阻止立即启动新的回复流程。
             // 检查队列状态
             const queueLength = replyTaskQueues[friendId] ? replyTaskQueues[friendId].length : 0;
 
@@ -3979,6 +5370,8 @@
                 userMessage: userMessage,
                 createdAt: Date.now(),
                 type: 'reply',
+                // 【本次修改：记录任务所属代次，通话后旧代次任务全部失效】
+                generation: replyQueueGeneration[friendId] || 0,
                 // 如果是空队列，这是第一个任务
                 isFirstInQueue: queueLength === 0
             };
@@ -3991,11 +5384,11 @@
 
             // 更新状态为"正在输入"
             if (appData.currentFriendId === friendId) {
-                chatStatus.textContent = "对方正在输入...";
+                chatStatus.textContent = "Typing💬";
             }
 
             // 如果当前没有在处理队列，开始处理
-            if (!isProcessingQueues[friendId]) {
+            if (!isProcessingQueues[friendId] && !(simCallActive && simCallFriendId === friendId)) {
                 processReplyTaskQueue(friendId);
             }
         }
@@ -4058,6 +5451,7 @@
                     botMessage.quote = quoteMessage.content;
                     botMessage.quoteType = quoteMessage.type;
                     botMessage.quoteSender = appData.userName;
+                    botMessage.quoteTargetTimestamp = quoteMessage.timestamp;
                 }
 
                 replies.push(botMessage);
@@ -4071,13 +5465,19 @@
             const friend = appData.friends[friendId];
             if (!friend) return;
 
+            // 【新增：当前好友通话期间暂停普通回复队列】
+            if (simCallActive && simCallFriendId === friendId) {
+                isProcessingQueues[friendId] = false;
+                return;
+            }
+
             // 如果没有任务，结束处理
             if (!replyTaskQueues[friendId] || replyTaskQueues[friendId].length === 0) {
                 isProcessingQueues[friendId] = false;
 
                 // 更新状态为在线
                 if (appData.currentFriendId === friendId) {
-                    chatStatus.textContent = "在线";
+                    chatStatus.textContent = "OnLine";
                 }
                 return;
             }
@@ -4087,6 +5487,8 @@
 
             // 获取当前任务
             const currentTask = replyTaskQueues[friendId][0];
+            // 【本次修改：保存当前任务代次，避免挂断后旧定时器继续输出】
+            const taskGeneration = currentTask.generation ?? (replyQueueGeneration[friendId] || 0);
 
             // 计算延迟：如果是队列中的第一个任务，延迟30秒-1分钟；否则延迟10-20秒
             const delay = currentTask.isFirstInQueue ?
@@ -4097,6 +5499,13 @@
 
             // 设置延迟后执行任务
             const timer = setTimeout(() => {
+                // 【本次修改：进入通话或任务代次已更新时，直接废弃旧任务】
+                if ((simCallActive && simCallFriendId === friendId) ||
+                    taskGeneration !== (replyQueueGeneration[friendId] || 0) ||
+                    !replyTaskQueues[friendId] || replyTaskQueues[friendId][0] !== currentTask) {
+                    isProcessingQueues[friendId] = false;
+                    return;
+                }
                 // 延迟结束后，生成回复消息
                 const replies = generateReplies(friend, currentTask.userMessage);
                 if (replies.length === 0) {
@@ -4107,7 +5516,7 @@
                 }
 
                 // 执行任务，发送消息
-                executeTaskWithReplies(friendId, replies, 0);
+                executeTaskWithReplies(friendId, replies, 0, taskGeneration);
             }, delay);
 
             // 保存定时器引用（临时状态）
@@ -4115,7 +5524,13 @@
         }
 
         // 执行任务（串行发送消息）
-        function executeTaskWithReplies(friendId, replies, messageIndex) {
+        function executeTaskWithReplies(friendId, replies, messageIndex, taskGeneration) {
+            // 【本次修改：通话中或旧任务代次失效时，不再向普通聊天窗口输出】
+            if ((simCallActive && simCallFriendId === friendId) ||
+                taskGeneration !== (replyQueueGeneration[friendId] || 0)) {
+                isProcessingQueues[friendId] = false;
+                return;
+            }
             const friend = appData.friends[friendId];
             if (!friend || !replies || messageIndex >= replies.length) {
                 // 任务完成，从队列中移除
@@ -4142,7 +5557,6 @@
             // 如果当前查看的是这个好友的聊天，则更新聊天界面
             if (appData.currentFriendId === friendId) {
                 addMessageToChat(reply);
-                chatArea.scrollTop = chatArea.scrollHeight;
             } else {
                 // 如果不是当前好友，增加未读计数
                 friend.unreadCount++;
@@ -4153,7 +5567,7 @@
             if (messageIndex < replies.length - 1) {
                 const nextDelay = Math.floor(Math.random() * 2000) + 3000; // 3-5秒
                 setTimeout(() => {
-                    executeTaskWithReplies(friendId, replies, messageIndex + 1);
+                    executeTaskWithReplies(friendId, replies, messageIndex + 1, taskGeneration);
                 }, nextDelay);
             } else {
                 // 这是最后一条消息，任务完成
@@ -4179,12 +5593,83 @@
 
             chatArea.appendChild(node);
 
-            // ✅ 发送消息后自动滚到底部
+            // 【本次修改：只有原本就在底部时才自动跟随；查看历史时绝不抢位置】
             requestAnimationFrame(() => {
-                chatArea.scrollTop = chatArea.scrollHeight;
+                if (!isViewingHistory) chatArea.scrollTop = chatArea.scrollHeight;
+                updateJumpLatestButton();
             });
         }
 
+        // 添加语音（最终稳定版）
+        function renderVoiceContent(container, msg) {
+            const voiceContent = document.createElement('div');
+            voiceContent.className = 'voice-content';
+
+            // 【本次修改：语音条根据录音秒数改变长度，仅修改宽度，不改播放与录音逻辑】
+            const voiceSeconds = Math.max(0, Number(msg.content && msg.content.duration) || 0);
+            const voiceWidth = Math.min(190, 82 + voiceSeconds * 1.8);
+            voiceContent.style.width = voiceWidth + 'px';
+
+            const duration = document.createElement('span');
+            duration.className = 'voice-duration';
+            duration.textContent = msg.content.duration + '"';
+
+            const icon = document.createElement('span');
+            icon.className = 'voice-wave-icon';
+            icon.innerHTML = `
+        <svg class="voice-svg flip-left" viewBox="0 0 24 24" aria-hidden="true">
+            <path class="wave w1" d="M3 12a2 2 0 0 1 0 0"></path>
+            <path class="wave w2" d="M6 9a4 4 0 0 1 0 6"></path>
+            <path class="wave w3" d="M9 6a7 7 0 0 1 0 12"></path>
+        </svg>
+    `;
+
+            const audio = document.createElement('audio');
+            audio.preload = 'auto';
+
+            if (
+                msg.content &&
+                typeof msg.content.audio === 'string' &&
+                msg.content.audio.startsWith('data:audio')
+            ) {
+                audio.src = msg.content.audio;
+            } else {
+                voiceContent.classList.add('voice-invalid');
+            }
+
+            voiceContent.appendChild(duration);
+            voiceContent.appendChild(icon);
+            voiceContent.appendChild(audio);
+
+            voiceContent.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                if (!audio.src) return;
+
+                try {
+                    if (audio.paused) {
+                        await audio.play();
+                        voiceContent.classList.add('playing');
+                    } else {
+                        audio.pause();
+                        voiceContent.classList.remove('playing');
+                    }
+                } catch (err) {
+                    console.warn('播放失败:', err);
+                    alert('播放失败：' + err.message);
+                    voiceContent.classList.remove('playing');
+                }
+            });
+
+            audio.addEventListener('ended', () => {
+                voiceContent.classList.remove('playing');
+            });
+
+            audio.addEventListener('pause', () => {
+                voiceContent.classList.remove('playing');
+            });
+
+            container.appendChild(voiceContent);
+        }
         //输入栏变化高度
         const textarea = document.querySelector('.message-input');
         const wrapper = document.querySelector('.input-wrapper');
@@ -4349,6 +5834,9 @@
             const friend = appData.friends[friendId];
             if (!friend || !friend.settings.activeSending) return;
 
+            // 【新增：通话期间不安排当前好友的普通主动发送】
+            if (simCallActive && simCallFriendId === friendId) return;
+
             // 清除旧的定时器
             if (activeSendingTimers[friendId]) {
                 clearTimeout(activeSendingTimers[friendId]);
@@ -4361,6 +5849,8 @@
 
             // 设置新的定时器
             activeSendingTimers[friendId] = setTimeout(() => {
+                // 【新增：如果定时器触发时正在通话，先暂停，挂断后重新安排】
+                if (simCallActive && simCallFriendId === friendId) return;
                 createActiveTask(friendId);
             }, nextDelayMs);
         }
@@ -4369,6 +5859,8 @@
         function createActiveTask(friendId) {
             const friend = appData.friends[friendId];
             if (!friend || !friend.settings.activeSending) return;
+            // 【新增：通话期间暂停当前好友的普通主动发送】
+            if (simCallActive && simCallFriendId === friendId) return;
 
             console.log(`为 ${friend.name} 创建主动发送任务`);
 
@@ -4380,6 +5872,8 @@
                 id: Date.now(),
                 createdAt: Date.now(),
                 type: 'active',
+                // 【本次修改：记录任务所属代次，通话后旧代次任务全部失效】
+                generation: replyQueueGeneration[friendId] || 0,
                 // 如果是空队列，这是第一个任务
                 isFirstInQueue: queueLength === 0
             };
@@ -4392,7 +5886,7 @@
 
             // 更新状态为"正在输入"
             if (appData.currentFriendId === friendId) {
-                chatStatus.textContent = "对方正在输入...";
+                chatStatus.textContent = "Typing💬";
             }
 
             // 如果当前没有在处理队列，开始处理
@@ -4818,6 +6312,9 @@
             saveData();
         });
 
+        // 【本次修改：主动来电开关】
+        incomingCallToggle.addEventListener('change', () => { const f = getCurrentFriend(); f.settings.incomingCallEnabled = incomingCallToggle.checked; saveData(); if (f.settings.incomingCallEnabled) scheduleIncomingCall(f.id); else clearTimeout(incomingCallTimers[f.id]); });
+
         // 引用消息回复开关事件
         quoteReplyToggle.addEventListener('change', () => {
             const currentFriend = getCurrentFriend();
@@ -5004,6 +6501,390 @@
             }
         });
 
+
+
+
+        // =========================================================
+        // 【本次修改：历史浏览 + 引用定位 + 长按消息操作】
+        // =========================================================
+        function isNearChatBottom() { return chatArea.scrollHeight - chatArea.scrollTop - chatArea.clientHeight < 44; }
+        function updateJumpLatestButton() { const show = isViewingHistory && !isNearChatBottom(); jumpLatestBtn.classList.toggle('visible', show); }
+        chatArea.addEventListener('scroll', () => { isViewingHistory = !isNearChatBottom(); updateJumpLatestButton(); }, { passive: true });
+        jumpLatestBtn.addEventListener('click', () => { isViewingHistory = false; chatArea.scrollTo({ top: chatArea.scrollHeight, behavior: 'smooth' }); updateJumpLatestButton(); });
+        function quoteSummary(msg) { if (!msg) return ''; if (msg.type === 'voice') return '[语音消息]'; if (msg.type === 'image' || msg.type === 'sticker') return msg.content; return String(msg.content ?? ''); }
+        function clearManualQuote() { manualQuoteTarget = null; manualQuotePreview.classList.remove('active'); }
+        manualQuoteCancel.addEventListener('click', clearManualQuote);
+        function beginManualQuote(index) { const f = getCurrentFriend(), msg = f.messages[index]; if (!msg) return; manualQuoteTarget = { index, msg }; const t = quoteSummary(msg); manualQuotePreviewText.textContent = (msg.sender === 'user' ? appData.userName : f.name) + '：' + ((msg.type === 'image' || msg.type === 'sticker') ? '[图片]' : t.slice(0, 45)); manualQuotePreview.classList.add('active'); messageInput.focus(); }
+        function locateQuotedMessage(msg) { const f = getCurrentFriend(); let idx = -1; if (msg.quoteTargetTimestamp) idx = f.messages.findIndex(m => m.timestamp === msg.quoteTargetTimestamp); if (idx < 0) { for (let i = f.messages.length - 1; i >= 0; i--) { if (i === f.messages.indexOf(msg)) continue; if (quoteSummary(f.messages[i]) === msg.quote) { idx = i; break; } } } if (idx < 0) return; const el = chatArea.querySelector(`.message-container[data-message-index="${idx}"]`); if (!el) return; isViewingHistory = true; el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.classList.remove('message-locate-flash'); requestAnimationFrame(() => el.classList.add('message-locate-flash')); setTimeout(() => el.classList.remove('message-locate-flash'), 1300); updateJumpLatestButton(); }
+        function closeMessageActionMenu() {
+            messageActionMenu.classList.remove('active');
+            messageActionMenu.innerHTML = '';
+            /* 【本次修改】关闭后放回 body，下一次长按可重新挂到对应消息 */
+            if (messageActionMenu.parentNode !== document.body) document.body.appendChild(messageActionMenu);
+        }
+        function showMessageActionMenu(index, container) {
+            const f = getCurrentFriend(), msg = f.messages[index];
+            if (!msg || msg.type === 'call_event' || msg.type === 'recall_event') return;
+
+            messageActionMenu.innerHTML = '';
+            const labels = msg.sender === 'user' ? ['引用', '撤回'] : ['引用', '解析'];
+            labels.forEach(label => {
+                const b = document.createElement('button');
+                b.className = 'action-menu-item';
+                b.textContent = label;
+                b.onclick = (e) => {
+                    e.stopPropagation();
+                    closeMessageActionMenu();
+                    if (label === '引用') beginManualQuote(index);
+                    else if (label === '撤回') {
+                        /* 【本次修改：撤回后不显示原消息；在时间戳位置保留“你撤回了一条消息”胶囊记录】 */
+                        const recalledMsg = f.messages[index];
+                        f.messages[index] = {
+                            sender: 'system',
+                            type: 'recall_event',
+                            content: '你撤回了一条消息',
+                            timestamp: recalledMsg.timestamp
+                        };
+                        /* 【本次修改：同步移除尚未处理的该消息回复任务，角色不能继续使用被撤回内容】 */
+                        if (replyTaskQueues[f.id]) {
+                            replyTaskQueues[f.id] = replyTaskQueues[f.id].filter(task => task.userMessage !== recalledMsg);
+                        }
+                        saveData();
+                        renderChat();
+                    }
+                    /* “解析”仅保留原入口，用户尚未定义后续行为，不擅自改业务逻辑 */
+                };
+                messageActionMenu.appendChild(b);
+            });
+
+            /* 【本次修改：长按栏真正依附当前消息，随消息一起滚动；不再固定在屏幕上】 */
+            container.style.position = container.style.position || 'relative';
+            container.appendChild(messageActionMenu);
+            messageActionMenu.classList.add('active');
+            messageActionMenu.style.visibility = 'hidden';
+            messageActionMenu.style.left = 'auto';
+            messageActionMenu.style.right = 'auto';
+            messageActionMenu.style.top = 'auto';
+            messageActionMenu.style.bottom = 'auto';
+
+            const mw = messageActionMenu.offsetWidth;
+            const mh = messageActionMenu.offsetHeight;
+            const gap = -12; // 【本次修改】缩短操作栏与消息气泡之间的间距
+
+            if (msg.sender === 'user') {
+                messageActionMenu.style.right = '6px';
+            } else {
+                messageActionMenu.style.left = '44px';
+            }
+            messageActionMenu.style.top = (-(mh + gap)) + 'px';
+
+            /* 小尖角尽量指向当前消息，不改变菜单功能 */
+            messageActionMenu.style.setProperty('--action-arrow-x', msg.sender === 'user' ? Math.max(12, mw - 20) + 'px' : '18px');
+            messageActionMenu.style.visibility = 'visible';
+        }
+        let messagePressTimer = null, messagePressStart = null;
+        chatArea.addEventListener('pointerdown', e => { const c = e.target.closest('.message-container'); if (!c) return; messagePressStart = { x: e.clientX, y: e.clientY }; clearTimeout(messagePressTimer); messagePressTimer = setTimeout(() => showMessageActionMenu(Number(c.dataset.messageIndex), c), 520) });
+        chatArea.addEventListener('pointermove', e => { if (messagePressStart && Math.hypot(e.clientX - messagePressStart.x, e.clientY - messagePressStart.y) > 10) clearTimeout(messagePressTimer) });
+        ['pointerup', 'pointercancel'].forEach(n => chatArea.addEventListener(n, () => { clearTimeout(messagePressTimer); messagePressStart = null }));
+        /* 【本次修改：只要点在操作栏之外就关闭；聊天区空白和其他消息都可直接取消】 */
+        document.addEventListener('pointerdown', e => { if (!e.target.closest('#messageActionMenu')) closeMessageActionMenu() });
+        /* 【本次修改：阻止图片原生 contextmenu，避免与自定义长按操作栏相撞】 */
+        chatArea.addEventListener('contextmenu', e => { if (e.target.closest('img')) e.preventDefault(); });
+
+        // =========================================================
+        // 【本次修改：模拟语音通话 V2 核心逻辑 开始】
+        // 1. 点击 Call 后先进入“正在拨号中”
+        // 2. 【本次修改】接通等待时间改为随机 0 秒-1 分钟
+        // 3. 【本次修改】接通后按指定陪伴站模式：每轮随机等待 30 秒-1 分钟
+        // 4. 【本次修改】每轮随机连续显示 1-10 条字卡，同轮每条间隔 6500ms
+        // 5. 字卡共用当前好友 settings.phrases
+        // 6. 开始通话时清空并作废该好友旧普通聊天任务
+        // 7. 挂断后仅重新安排新的主动发送，不恢复旧任务
+        // =========================================================
+        // 【本次修改：真人接听等待时间，随机 0 秒-1 分钟】
+        function simCallConnectDelay() {
+            return Math.floor(Math.random() * 60 * 1000);
+        }
+
+        // 【本次修改：通话模式每一轮之间随机等待 30 秒-1 分钟】
+        function simCallRoundDelay() {
+            return 30 * 1000 + Math.floor(Math.random() * 30 * 1000);
+        }
+
+        function simCallFormatDuration(ms) {
+            const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+            const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+            const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+            return `${minutes}:${seconds}`;
+        }
+
+        function simCallRenderFriend(friend) {
+            simCallName.textContent = friend.name || '聊天伙伴';
+            simCallAvatar.innerHTML = '';
+
+            if (friend.avatarImage) {
+                const img = document.createElement('img');
+                img.src = friend.avatarImage;
+                img.alt = friend.name || '头像';
+                simCallAvatar.appendChild(img);
+            } else {
+                simCallAvatar.textContent = friend.avatar || (friend.name ? friend.name.charAt(0) : '友');
+            }
+
+            if (friend.useCustomBackground && friend.backgroundImage) {
+                simCallBackground.style.backgroundImage = `url("${friend.backgroundImage}")`;
+            } else {
+                simCallBackground.style.backgroundImage = 'none';
+            }
+        }
+
+        function simCallPickPhrase() {
+            const friend = appData.friends[simCallFriendId];
+            const phrases = friend && friend.settings && Array.isArray(friend.settings.phrases)
+                ? friend.settings.phrases.filter(item => typeof item === 'string' && item.trim())
+                : [];
+
+            if (!phrases.length) return null;
+            return phrases[Math.floor(Math.random() * phrases.length)];
+        }
+
+        // 【本次修改：字幕区域固定保留两个中央位置，后续字幕循环复用】
+        function simCallPrepareRecordSlots(count) {
+            simCallMessageWrap.innerHTML = '';
+            simCallMessageWrap.style.display = 'flex';
+            simCallMessageWrap.classList.remove('visible', 'leaving');
+
+            const visibleSlotCount = 2;
+            for (let i = 0; i < visibleSlotCount; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'sim-call-record-slot';
+                slot.dataset.index = String(i);
+                simCallMessageWrap.appendChild(slot);
+            }
+        }
+
+        // 【本次修改：字幕从上到下显示两条；第3、4、5条循环回第1、第2个位置】
+        function simCallShowPhrase(text, slotIndex) {
+            if (!simCallActive || !simCallConnected || !text) return;
+
+            const slots = simCallMessageWrap.querySelectorAll('.sim-call-record-slot');
+            if (!slots.length) return;
+            const slot = slots[slotIndex % slots.length];
+            if (!slot) return;
+
+            const item = document.createElement('div');
+            item.className = 'sim-call-record-item';
+            item.textContent = text;
+            slot.innerHTML = '';
+            slot.appendChild(item);
+            simCallOverlay.classList.add('speaking');
+
+            requestAnimationFrame(() => item.classList.add('visible'));
+
+            // 沿用陪伴站节奏：显示6000ms，再用约500ms淡出；下一条在6500ms时出现。
+            const fadeTimer = setTimeout(() => {
+                if (!simCallActive) return;
+                item.classList.remove('visible');
+                item.classList.add('leaving');
+                simCallOverlay.classList.remove('speaking');
+            }, 6000);
+
+            const clearTimer = setTimeout(() => {
+                if (item.parentNode === slot) slot.innerHTML = '';
+            }, 6500);
+
+            simCallBatchTimers.push(fadeTimer, clearTimer);
+        }
+
+        // 【本次修改：每轮随机1-10条，第一条在轮次触发时立即显示，后续按6500ms顺序显示】
+        function simCallPlayPhraseRound() {
+            if (!simCallActive || !simCallConnected) return 0;
+
+            const messageCount = Math.floor(Math.random() * 10) + 1; // 【本次修改：通话每轮 1-10 条】
+            simCallBatchTimers.forEach(timer => clearTimeout(timer));
+            simCallBatchTimers = [];
+            simCallPrepareRecordSlots(messageCount);
+
+            // 【本次修改：首条不再套 setTimeout(0)，避免首轮触发后字幕未真正执行】
+            const firstPhrase = simCallPickPhrase();
+            if (firstPhrase) {
+                simCallShowPhrase(firstPhrase, 0);
+            }
+
+            for (let i = 1; i < messageCount; i++) {
+                const timer = setTimeout(() => {
+                    if (!simCallActive || !simCallConnected) return;
+                    const phrase = simCallPickPhrase();
+                    if (phrase) simCallShowPhrase(phrase, i);
+                }, i * 6500);
+
+                simCallBatchTimers.push(timer);
+            }
+
+            // 返回本轮完整播放时长，供下一轮在本轮结束后再重新计时
+            return messageCount * 6500;
+        }
+
+        // 【本次修改：先等待30秒-1分钟；本轮全部结束后，再重新计算下一轮30秒-1分钟】
+        function simCallScheduleNextRound() {
+            if (!simCallActive || !simCallConnected) return;
+
+            clearTimeout(simCallPhraseTimer);
+            simCallPhraseTimer = setTimeout(() => {
+                if (!simCallActive || !simCallConnected) return;
+
+                const roundDuration = simCallPlayPhraseRound();
+
+                // 【本次修改：避免下一轮计时与当前1-10条字幕播放重叠】
+                const nextRoundTimer = setTimeout(() => {
+                    if (!simCallActive || !simCallConnected) return;
+                    simCallScheduleNextRound();
+                }, roundDuration);
+
+                simCallBatchTimers.push(nextRoundTimer);
+            }, simCallRoundDelay());
+        }
+
+        function simCallConnect() {
+            if (!simCallActive) return;
+
+            simCallConnected = true;
+            clearInterval(simCallDialClockTimer); // 【本次修改：接通后停止拨号等待计时】
+            simCallDialClockTimer = null;
+            simCallStartedAt = Date.now();
+            simCallState.textContent = '语音通话中'; // 【本次修改：接通后顶部显示“语音通话中”】
+            simCallDuration.textContent = '00:00';
+            simCallOverlay.classList.remove('dialing');
+            simCallOverlay.classList.add('connected');
+
+            clearInterval(simCallClockTimer);
+            simCallClockTimer = setInterval(() => {
+                simCallDuration.textContent = simCallFormatDuration(Date.now() - simCallStartedAt);
+            }, 1000);
+
+            simCallScheduleNextRound();
+        }
+
+        function startSimulatedCall() {
+            if (simCallActive) return;
+
+            const friend = getCurrentFriend();
+            if (!friend) return;
+
+            const phrases = friend.settings && Array.isArray(friend.settings.phrases)
+                ? friend.settings.phrases.filter(item => typeof item === 'string' && item.trim())
+                : [];
+
+            if (!phrases.length) {
+                alert('当前好友的字卡库为空，请先在设置中添加字卡。');
+                return;
+            }
+
+            simCallActive = true;
+            simCallConnected = false;
+            simCallFriendId = friend.id;
+
+            // 【本次修改：通话开始时废弃旧回复任务，之前等待中的任务全部不再计算】
+            replyQueueGeneration[friend.id] = (replyQueueGeneration[friend.id] || 0) + 1;
+            replyTaskQueues[friend.id] = [];
+            isProcessingQueues[friend.id] = false;
+            stopActiveSending(friend.id);
+
+            simCallRenderFriend(friend);
+            simCallState.textContent = '正在拨号中'; // 【本次修改：拨号阶段顶部显示“正在拨号中”】
+            simCallDialStartedAt = Date.now();
+            simCallDuration.textContent = '00:00'; // 【本次修改：名字下方显示拨号等待秒数】
+            clearInterval(simCallDialClockTimer);
+            simCallDialClockTimer = setInterval(() => {
+                if (!simCallActive || simCallConnected) return;
+                simCallDuration.textContent = simCallFormatDuration(Date.now() - simCallDialStartedAt);
+            }, 1000);
+            // 【本次修改：开始新通话前清除上一次可能残留的同轮字卡任务】
+            simCallBatchTimers.forEach(timer => clearTimeout(timer));
+            simCallBatchTimers = [];
+            simCallMessageWrap.style.display = 'none';
+            simCallMessageWrap.classList.remove('visible', 'leaving');
+            if (simCallMessage) simCallMessage.textContent = '';
+            simCallMessageWrap.innerHTML = ''; // 【本次修改：清空本轮纵向字幕位置】
+
+            simCallOverlay.classList.remove('connected', 'speaking');
+            simCallOverlay.classList.add('active', 'dialing');
+            simCallOverlay.setAttribute('aria-hidden', 'false');
+            chatStatus.textContent = 'Calling';
+
+            const toolPanel = document.getElementById('tool-panel');
+            if (toolPanel) toolPanel.classList.add('hidden');
+
+            // 【本次修改：随机 0 秒-1 分钟后接通】
+            clearTimeout(simCallConnectTimer);
+            simCallConnectTimer = setTimeout(simCallConnect, simCallConnectDelay());
+        }
+
+        function endSimulatedCall() {
+            if (!simCallActive) return;
+
+            const endedFriendId = simCallFriendId;
+            const callWasConnected = simCallConnected; // 【本次修改：仅已接通通话留下结束记录】
+            simCallActive = false;
+            simCallConnected = false;
+            simCallFriendId = null;
+
+            clearTimeout(simCallConnectTimer);
+            clearTimeout(simCallPhraseTimer);
+            // 【本次修改：挂断时清除本轮尚未出现的字卡】
+            simCallBatchTimers.forEach(timer => clearTimeout(timer));
+            simCallBatchTimers = [];
+            clearTimeout(simCallBubbleTimer);
+            clearInterval(simCallClockTimer);
+            clearInterval(simCallDialClockTimer); // 【本次修改：挂断时清理拨号等待计时】
+            simCallDialClockTimer = null;
+            simCallConnectTimer = null;
+            simCallPhraseTimer = null;
+            simCallBubbleTimer = null;
+            simCallClockTimer = null;
+
+            simCallMessageWrap.classList.remove('visible', 'leaving');
+            simCallMessageWrap.innerHTML = ''; // 【本次修改：挂断时清空所有纵向字幕】
+            simCallMessageWrap.style.display = 'none';
+            simCallOverlay.classList.remove('active', 'dialing', 'connected', 'speaking');
+            simCallOverlay.setAttribute('aria-hidden', 'true');
+
+            // 【本次修改：旧普通回复任务不恢复；保持空队列，从挂断后重新开始】
+            if (endedFriendId) {
+                replyTaskQueues[endedFriendId] = [];
+                isProcessingQueues[endedFriendId] = false;
+            }
+
+            // 【本次修改：主动发送从挂断时重新随机计时】
+            const friend = endedFriendId ? appData.friends[endedFriendId] : null;
+            if (friend && friend.settings.activeSending) {
+                scheduleActiveMessage(endedFriendId);
+            }
+
+            if (friend && callWasConnected) { const record = { sender: 'bot', type: 'call_event', content: '通话结束', timestamp: Date.now() }; friend.messages.push(record); saveData(); if (appData.currentFriendId === endedFriendId) addMessageToChat(record); }
+            if (friend && friend.settings.incomingCallEnabled) scheduleIncomingCall(endedFriendId);
+            updateChatStatusForCurrentFriend();
+        }
+
+        // 【本次修改：各角色独立随机主动来电，2-10分钟重新随机】
+        function scheduleIncomingCall(friendId) { clearTimeout(incomingCallTimers[friendId]); const f = appData.friends[friendId]; if (!f || !f.settings.incomingCallEnabled) return; incomingCallTimers[friendId] = setTimeout(() => { const x = appData.friends[friendId]; if (!x || !x.settings.incomingCallEnabled) return; if (incomingCallFriendId || (simCallActive && simCallFriendId === friendId) || document.hidden) { scheduleIncomingCall(friendId); return; } incomingCallFriendId = friendId; incomingCallName.textContent = x.name || '聊天伙伴'; incomingCallAvatar.innerHTML = ''; if (x.avatarImage) { const im = document.createElement('img'); im.src = x.avatarImage; im.style.cssText = 'width:100%;height:100%;object-fit:cover'; incomingCallAvatar.appendChild(im) } else incomingCallAvatar.textContent = x.avatar || x.name.charAt(0); incomingCallBackground.style.backgroundImage = x.useCustomBackground && x.backgroundImage ? `url("${x.backgroundImage}")` : 'none'; incomingCallStartedAt = Date.now(); incomingCallDuration.textContent = '00:00'; clearInterval(incomingCallClockTimer); incomingCallClockTimer = setInterval(() => incomingCallDuration.textContent = simCallFormatDuration(Date.now() - incomingCallStartedAt), 1000); incomingCallOverlay.classList.add('active'); incomingCallOverlay.setAttribute('aria-hidden', 'false'); if (navigator.vibrate) navigator.vibrate([250, 150, 250]); }, (2 + Math.random() * 8) * 60 * 1000); }
+        function dismissIncomingCall(reschedule = true) { const id = incomingCallFriendId; incomingCallFriendId = null; clearInterval(incomingCallClockTimer); incomingCallOverlay.classList.remove('active'); incomingCallOverlay.setAttribute('aria-hidden', 'true'); if (reschedule && id && appData.friends[id]?.settings.incomingCallEnabled) scheduleIncomingCall(id); }
+        incomingCallDecline.addEventListener('click', () => dismissIncomingCall(true));
+        incomingCallAccept.addEventListener('click', () => { const id = incomingCallFriendId, f = id && appData.friends[id]; if (!f) return dismissIncomingCall(false); if (simCallActive && simCallFriendId !== id) endSimulatedCall(); if (simCallActive) return; dismissIncomingCall(false); simCallActive = true; simCallConnected = false; simCallFriendId = id; replyQueueGeneration[id] = (replyQueueGeneration[id] || 0) + 1; replyTaskQueues[id] = []; isProcessingQueues[id] = false; stopActiveSending(id); simCallRenderFriend(f); simCallOverlay.classList.remove('dialing', 'speaking'); simCallOverlay.classList.add('active'); simCallOverlay.setAttribute('aria-hidden', 'false'); simCallConnect(); });
+        function restartAllIncomingCalls() { Object.keys(appData.friends).forEach(id => { if (appData.friends[id].settings.incomingCallEnabled) scheduleIncomingCall(id) }) }
+
+        if (callBtn) {
+            callBtn.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                startSimulatedCall();
+            });
+        }
+
+        simCallEndBtn.addEventListener('click', endSimulatedCall);
+        // 【本次修改：模拟语音通话 V2 核心逻辑 结束】
+
+
         // 角色头像上传事件
         uploadAvatarBtn.addEventListener('click', () => {
             avatarFileInput.click();
@@ -5045,17 +6926,6 @@
             }
         });
 
-        // 消息操作菜单事件
-        copyMessageBtn.addEventListener('click', () => {
-            if (currentSelectedMessage) {
-                copyToClipboard(currentSelectedMessage.content);
-                copySuccess.style.display = 'block';
-                setTimeout(() => {
-                    copySuccess.style.display = 'none';
-                }, 2000);
-            }
-            messageActionMenu.style.display = 'none';
-        });
 
         // 主题切换按钮事件
         lightThemeBtn.addEventListener('click', () => {
@@ -5079,9 +6949,6 @@
 
         // 点击其他地方隐藏消息操作菜单
         document.addEventListener('click', (e) => {
-            if (!messageActionMenu.contains(e.target) && !e.target.classList.contains('message')) {
-                messageActionMenu.style.display = 'none';
-            }
 
             // 字卡编辑和删除按钮事件处理（设置界面中的）
             if (e.target.classList.contains('phrase-edit-btn')) {
@@ -5149,9 +7016,9 @@
                 mainContainer.style.display = 'flex';
 
                 // 再次确保滚动到最新消息
-                setTimeout(() => {
-                    chatArea.scrollTop = chatArea.scrollHeight;
-                }, 50);
+                setTimeout(() => { chatArea.scrollTop = chatArea.scrollHeight; }, 50);
+                // 【本次修改：恢复已开启角色的随机主动来电】
+                restartAllIncomingCalls();
 
             } catch (error) {
                 console.error("初始化失败:", error);
@@ -5204,6 +7071,22 @@
                 e.preventDefault();
             }
         }, { passive: false });
+
+        // 离线缓存开关（开发期一定是 false）
+        const ENABLE_SW = true;
+
+        if (ENABLE_SW && 'serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => {
+                        console.log('Service Worker 注册成功', reg.scope);
+                    })
+                    .catch(err => {
+                        console.error('Service Worker 注册失败', err);
+                    });
+            });
+        }
+
     </script>
 </body>
 
